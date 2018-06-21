@@ -1,0 +1,51 @@
+﻿[
+  {
+    "m_RoomTypeName": "MainLobby",
+    "m_Name": "100041",
+    "m_ImageName": "wandou.beanvr.com/image/zhudating.jpg",
+    "m_RoomDescription": "100056",
+    "m_CanCreate":false
+  },
+  {
+    "m_RoomTypeName": "Concert",
+    "m_Name": "100042",
+    "m_ImageName": "wandou.beanvr.com/image/diy_studio.jpg",
+    "m_RoomDescription": "100057",
+     "m_CanCreate":true
+  },
+  {
+    "m_RoomTypeName": "PartyRoom",
+    "m_Name": "100043",
+    "m_ImageName": "wandou.beanvr.com/image/diy_chat_room.jpg",
+    "m_RoomDescription": "100058",
+      "m_CanCreate":true
+  },
+  {
+    "m_RoomTypeName": "Panorama360",
+    "m_Name": "100044",
+    "m_ImageName": "wandou.beanvr.com/image/diy_360_room.jpg",
+    "m_RoomDescription": "100059",
+      "m_CanCreate":true
+  },
+  {
+    "m_RoomTypeName": "Antiquaty",
+    "m_Name": "100053",
+    "m_ImageName": "wandou.beanvr.com/image/diy_courtyard_room.jpg",
+    "m_RoomDescription": "100061",
+      "m_CanCreate":true
+  },
+ {
+    "m_RoomTypeName": "Athena",
+    "m_Name": "100077",
+    "m_ImageName": "wandou.beanvr.com/image/diy_athena_room.jpg",
+    "m_RoomDescription": "100091",
+      "m_CanCreate":true
+  },
+   {
+    "m_RoomTypeName": "Conference",
+    "m_Name": "100092",
+    "m_ImageName": "wandou.beanvr.com/image/diy_conference_room.jpg",
+    "m_RoomDescription": "100093",
+      "m_CanCreate":true
+  }
+]

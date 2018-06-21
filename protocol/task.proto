@@ -1,0 +1,202 @@
+syntax = "proto2";
+//option optimize_for = LITE_RUNTIME;
+import "common_pb.proto";
+
+package protocol;
+
+
+//邮件协议开始
+message MailUnit
+{
+	optional uint32 id = 1; //邮件的id，收到的时候生成
+	optional uint64 getitme = 2;//收到邮件的时间
+	optional uint32 cfgid = 3;//邮件的主题和内容都存在于配置文件中
+	optional bool isread = 4;//是否已经读过
+}
+
+message MailInfo
+{
+	repeated MailUnit mailunit = 1;
+}
+
+message cs_mail
+{
+	optional uint32 id = 1;//邮件id
+	optional bool getall = 2;//为true表示一键领取全部
+}
+
+message sc_mail
+{
+	optional uint32 result = 1;
+	optional MailInfo mailinfo = 2;//邮件信息
+	repeated AwardUnit awardunit = 3;//打开邮件，如果有奖励，服务器返回奖励的具体的内容
+	repeated AwardUnit giftunit = 4;//奖励如果有礼包类型，礼包打开的内容在这里
+	optional uint32 id = 5;//打开邮件的时候，客户端带过来的邮件id
+	optional bool getall = 6;//为true表示一键领取全部
+}
+
+//邮件协议结束
+
+//任务开始
+message cs_task
+{
+	optional uint32 taskid = 1;//每日任务id，或者设置用来在好友资料展示的成就项
+//	optional uint32 new_guide_step = 2;//新手任务的步数，MAIN_DONE_NEW_GUIDE_TASK_REQ协议传过来，告诉服务器完成了第几步
+	optional uint32 award_step = 3;//任务活跃点或者成就点，领取第几步的奖励
+	
+	optional uint32 type = 4;//任务类型 TASK_UNIT_TYPE
+	optional uint32 param1 = 5;
+	optional uint32 param2 = 6;
+	
+	optional uint32 show_pos = 7;//设置的是哪一个位置，UI上看有四个位置，0到3来表示
+	
+	optional pb_new_guide_unit guide = 8; //完成了哪一个项新手引导，MAIN_DONE_NEW_GUIDE_TASK_REQ协议传过来
+	optional uint32 new_guide_award_id = 9; //领取新手引导奖励的id
+}
+
+message sc_task
+{
+	optional uint32 					result			= 1;
+	repeated AwardUnit 					awardunit		= 2;//奖励的回包
+	optional pb_task_info 				task_info		= 5;//任务数据
+	optional pb_new_guide_unit 			guide			= 6;//带回MAIN_DONE_NEW_GUIDE_TASK_REQ的请求数据
+	
+	//任务阶段宝箱的显示内容
+	repeated god_card_unit 				card_unit 		= 7;//每一类卡至少掉落的数
+    optional uint32 					total_num 		= 8;//卡牌的总数
+	repeated AwardUnit 					show_unit 		= 9;//用来展示非英雄卡类物品的掉落情况
+}
+//任务结束
+
+message cs_back_main_ui
+{
+}
+
+message sc_back_main_ui
+{
+	optional uint32 result = 1;
+	repeated uint32 complete_task_day_id = 2;//已经完成，可以领取奖励的每日任务id
+}
+
+message cs_activity
+{
+	optional uint32 login_day = 1;//领取七天奖励的时候使用，领第几天的奖励
+	optional uint32 activity_page_id = 2;//活动页签id
+	optional uint32 gift_level = 3;//等级礼包
+	optional uint32 activity_task_id = 4;//活动任务id
+}
+
+message sc_activity
+{
+	optional uint32 result = 1;
+	repeated AwardUnit awardunit = 2; //七天登录或者等级礼包的奖励，活动任务的奖励
+	optional pb_activity_info activity_info = 3;//活动信息
+	optional uint32 activity_task_id = 5;//返回操作的活动任务id
+}
+
+// tdt_day开头的为日常(支线)任务, tdt_main开头的为主线任务
+enum TASK_UNIT_TYPE
+{
+	tdt_day_login 									= 1;    // 每日登陆
+	tdt_day_pvp_match 								= 2;    // pvp匹配战斗次数(不区分pvp的类型)
+	tdt_day_pvp_win 								= 3;    // pvp匹配战斗胜利(不区分pvp的类型)
+	tdt_day_1v1_pvp_win 							= 4;    // 1v1排位战斗胜利
+	tdt_day_buy_gold 								= 5;    // 商城购买金币次数
+	tdt_day_open_chest 								= 6;    // 打开宝箱的次数
+	tdt_day_buy_god_card 							= 7;    // 商城购买卡牌的次数
+	tdt_day_upgrade_tech_tree 						= 8;    // 升级科技树的次数
+    tdt_day_cost_diamond 							= 9;    // 消耗钻石的数量
+
+	tdt_day_pve3r_general_battle 					= 10;   // pve3段式普通战斗次数任务(普通副本)
+	tdt_day_pve3r_elite_battle 						= 11;   // pve3段式精英战斗次数任务(精英副本)
+	tdt_day_lightom_battle 							= 12;   // 光影战场战斗次数任务
+	tdt_day_ancient_battle 							= 13;   // 远古战场战斗次数任务
+	tdt_day_godsofwar_battle 						= 14;   // 诸神之战战斗次数任务
+	tdt_day_academy 								= 15;   // 学院次数任务
+	tdt_day_rank1v1 								= 16;   // 天梯1v1次数任务
+	tdt_day_rank2v2 								= 17;   // 天梯2v2次数任务
+	tdt_day_use_exp_water_num 						= 18;   // 每日使用经验药水
+	
+	tdt_main_start 									= 100;  // main任务的起始值(服务端用)
+	tdt_main_team_lvl 								= 101;  // 队伍等级达到
+	tdt_main_unlock_god_num 						= 102;  // 解锁神明数量达到
+	//tdt_main_cross_pve 								= 103;  // 通过哪一个pve关卡
+	tdt_main_kill_god_num 							= 104;  // 战斗中击杀神明的数量
+	tdt_main_open_chest 							= 105;  // 打开宝箱的次数
+	//tdt_main_cross_chapter 							= 106;  // 通过某一章节
+
+	tdt_main_pve3r_general_progress 				= 110;  // pve3段式普通通关进度任务(普通副本)
+	tdt_main_pve3r_elite_progress 					= 111;  // pve3段式精英通关进度任务(精英副本)
+	tdt_main_ancient_pass_all_num 					= 112;  // 远古通关次数任务
+	tdt_main_talent_progress 						= 113;  // 天赋进度任务，x个y等级天赋英雄
+	tdt_main_sociaty 								= 114;  // 工会, Todo
+	tdt_main_friends 								= 115;  // 好友数量
+	tdt_main_god_star_lv 							= 116;  // 英雄星级, x个y星级英雄
+	tdt_main_god_skill_lv 							= 117;  // 英雄技能等级, x个技能级能英雄
+	tdt_main_god_num 								= 118;  // 英雄个数, x等级英雄有y个
+
+	tdt_main_rank1v1_kill_gods 						= 130;  // 天梯1v1击杀英雄个数任务
+	tdt_main_rank1v1_kill_soldiers 					= 131;  // 天梯1v1击杀士兵个数任务
+	tdt_main_rank1v1_destroy_gb 					= 132;  // 天梯1v1击杀炮车个数任务
+	tdt_main_rank1v1_victory 						= 133;  // 天梯1v1胜利数任务
+	tdt_main_rank1v1_destroy_tower 					= 134;  // 天梯1v1推塔数任务
+	tdt_main_rank1v1_cups 							= 135;  // 天梯1v1奖杯数任务, 对应rank_score(天梯积分)
+
+	tdt_main_rank2v2_kill_gods 						= 150;  // 天梯2v2击杀英雄个数任务
+	tdt_main_rank2v2_kill_soldiers 					= 151;  // 天梯2v2击杀士兵个数任务
+	tdt_main_rank2v2_destroy_gb 					= 152;  // 天梯2v2击杀炮车个数任务
+	tdt_main_rank2v2_victory 						= 153;  // 天梯2v2胜利数任务
+	tdt_main_rank2v2_destroy_tower 					= 154;  // 天梯2v2推塔数任务
+	tdt_main_rank2v2_cups 							= 155;  // 天梯2v2奖杯数任务, 对应rank_score(天梯积分)
+
+	tdt_main_lightom_gp_progress 					= 200;  // 光影金币池进度任务
+	tdt_main_lightom_ep_progress 					= 201;  // 光影经验池进度任务
+	tdt_main_lightom_tp_progress 					= 202;  // 光影科技点池进度任务
+
+	tdt_main_GR_pantheon_progress 					= 220;  // 希腊神殿难度进度任务
+	tdt_main_CN_pantheon_progress 					= 221;  // 中国神殿难度进度任务
+	tdt_main_EP_pantheon_progress 					= 222;  // 埃及神殿难度进度任务
+	tdt_main_MA_pantheon_progress 					= 223;  // 玛雅神殿难度进度任务
+	tdt_main_RO_pantheon_progress 					= 224;  // 罗马神殿难度进度任务
+
+	tdt_main_unlock_tank_god 						= 240;  // 解锁坦克英雄任务
+	tdt_main_unlock_warrior_god 					= 241;  // 解锁战士英雄任务
+	tdt_main_unlock_assassin_god 					= 242;  // 解锁刺客英雄任务
+	tdt_main_unlock_shooter_god 					= 243;  // 解锁射手英雄任务
+	tdt_main_unlock_wizard_god 						= 244;  // 解锁法师英雄任务
+
+	tdt_main_academy_soldier_lv 					= 260;  // 学院兵等级任务
+	tdt_main_academy_gun_bogie_lv 					= 261;  // 学院炮车等级任务
+	tdt_main_academy_tower_lv 						= 262;  // 学院塔等级任务
+}
+
+enum TASK_TYPE
+{
+	ttl_day_task = 1;//支线任务
+	ttl_main_task = 2;//主线任务
+}
+
+enum TASK_SCORE_TYPE
+{
+	tscore_t_day = 1;//每日活跃点
+//	tscore_t_week = 2;//每周活跃点
+//	tscore_t_achive = 3;//成就点
+};
+
+message sc_team_lvl_up
+{
+	optional int32 result = 1;
+	optional uint32 bef_team_lvl = 2; //升级前的等级
+	optional uint32 cur_team_lvl = 3; //当前等级
+	optional uint32 bef_strength = 4; //升级前的体力
+	optional uint32 cur_strength = 5; //当前体力
+}
+
+enum GOD_TYPE
+{
+	gt_tank 		= 1; //坦克
+	gt_wizard		= 2;//法师
+	gt_assassin		= 3;//刺客
+	gt_shooter		= 4;//射手
+	gt_warrior 		= 5;//战士
+}

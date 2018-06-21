@@ -1,0 +1,139 @@
+{
+  "Login": {
+  "UIMain":0,
+    "UIHome": 1,
+    "UIBeanVR": 0,
+    "UIRoom": 0,
+    "UIMicrophone": 0,
+    "UIFriend": 0,
+    "UIBroswer": 0,
+    "UICamera": 0,
+    "UIFullVedio": 0,
+	"UISpeechRecognition":0,
+	"UIMesage":0,
+    "360Vedio": 0
+  },
+
+  "Guide": {
+  "UIMain":0,
+    "UIHome": 1,
+    "UIBeanVR": 0,
+    "UIRoom": 0,
+    "UIMicrophone": 0,
+    "UIFriend": 0,
+    "UIBroswer": 0,
+    "UICamera": 0,
+    "UIFullVedio": 0,
+	"UIMesage":1,
+	"UISpeechRecognition":0,
+    "360Vedio": 0
+  },
+
+  "MainLobby": {
+  "UIMain":1,
+    "UIBeanVR": 1,
+    "UIHome": 1,
+    "UIRoom": 1,
+    "UIMicrophone": 1,
+    "UIFriend": 1,
+    "UIBroswer": 1,
+    "UICamera": 1,
+    "UIFullVedio": 0,
+	"UIMesage":1,
+	"UISpeechRecognition":1,
+    "360Vedio": 0
+  },
+
+  "Concert": {
+  "UIMain":1,
+    "UIBeanVR": 1,
+    "UIHome": 1,
+    "UIRoom": 1,
+    "UIMicrophone": 1,
+    "UIFriend": 1,
+    "UIBroswer": 1,
+    "UICamera": 1,
+    "UIFullVedio": 1,
+	"UIMesage":1,
+	"UISpeechRecognition":1,
+    "360Vedio": 0
+  },
+
+  "PartyRoom": {
+  "UIMain":1,
+    "UIBeanVR": 1,
+    "UIHome": 1,
+    "UIRoom": 1,
+    "UIMicrophone": 1,
+    "UIFriend": 1,
+    "UIBroswer": 1,
+    "UICamera": 1,
+    "UIFullVedio": 0,
+	"UIMesage":1,
+	"UISpeechRecognition":1,
+    "360Vedio": 0
+  },
+
+  "Panorama360": {
+  "UIMain":1,
+    "UIBeanVR": 1,
+    "UIHome": 1,
+    "UIRoom": 1,
+    "UIMicrophone": 1,
+    "UIFriend": 1,
+    "UIBroswer": 1,
+    "UICamera": 1,
+    "UIFullVedio": 0,
+	"UIMesage":1,
+	"UISpeechRecognition":1,
+    "360Vedio": 1
+  },
+
+   "Antiquaty": {
+   "UIMain":1,
+    "UIBeanVR": 1,
+    "UIHome": 1,
+    "UIRoom": 1,
+    "UIMicrophone": 1,
+    "UIFriend": 1,
+    "UIBroswer": 1,
+    "UICamera": 1,
+    "UIFullVedio": 1,
+	"UIMesage":1,
+	"UISpeechRecognition":1,
+    "360Vedio": 1
+  },
+
+    
+"Athena": {
+"UIMain":0,
+    "UIBeanVR": 1,
+    "UIHome": 1,
+    "UIRoom": 1,
+    "UIMicrophone": 1,
+    "UIFriend": 1,
+    "UIBroswer": 0,
+    "UICamera": 1,
+    "UIFullVedio": 0,
+	"UIMesage":1,
+	"UISpeechRecognition":1,
+    "360Vedio": 0
+  },
+
+  "Conference": {
+  "UIMain":1,
+    "UIBeanVR": 1,
+    "UIHome": 1,
+    "UIRoom": 1,
+    "UIMicrophone": 1,
+    "UIFriend": 1,
+    "UIBroswer": 1,
+    "UICamera": 1,
+    "UIFullVedio": 1,
+	"UIMesage":1,
+	"UISpeechRecognition":1,
+    "360Vedio": 0
+  }
+
+
+}

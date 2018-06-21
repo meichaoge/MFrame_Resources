@@ -1,0 +1,121 @@
+syntax = "proto2";
+//option optimize_for = LITE_RUNTIME;
+import "common_pb.proto";
+package protocol;
+
+enum FRIEND_GAME_STATE
+{
+	fgs_offline = 0;//离线
+	fgs_online = 1;//在线
+	fgs_fighting = 2;//游戏中
+}
+
+enum FRIEND_STATE
+{
+	fs_init = 0;//初始状态
+	fs_add = 1;//主动添加了对方
+	fs_beadd = 2;//对方添加了你
+	fs_both = 3;//双方同意互为好友
+}
+
+enum FRIEND_GIFT_FLAG
+{
+	fgiftf_init 	 = 0;//初始为0
+	fgiftf_presented = 1;//该好友向自己赠送了礼物
+	fgiftf_got 		 = 2;//已经领取了好友向自己赠送的礼物
+}
+
+message FriendListInfo
+{
+	repeated FriendListUnit frd_lst = 1;
+	//optional uint64 gift_fresh_time = 2;//礼物领取和赠送的每日刷新时间
+	//optional bool invaild = 3;//无意义的字段，用作当清空好友列表之后读取的好友列表数据也不会为空
+}
+
+message FriendMsgUnit
+{
+	optional bytes content = 1;//消息内容
+	optional uint64 sendtime = 2;//发送的时间
+	optional uint64 senduid = 3;//发送方uid
+}
+
+message cs_friend
+{
+	optional uint64 uid 			= 1;
+	optional bytes nick_name 		= 2;//昵称
+	optional bytes content 			= 3;//发送消息的内容
+	optional uint32 state 			= 4;// FRIEND_GAME_STATE
+	
+	repeated uint64 uid_lst 		= 6;//同意好友，拒绝好友，删除好友的时候，uid写入这个数组，批量和单个都写入
+	optional bool	all				= 7;//为true表示在赠送和领取的时候是一键操作
+	optional bool   agree			= 8;//服务器用
+}
+
+message sc_friend
+{
+	optional int32 result 					= 1;
+	optional FriendInfoTotal frd_info 		= 2;//单条好友的信息
+	repeated FriendInfoTotal frd_lst 		= 3;//打开好友界面的返回 或者 登录的时候返回多个好友添加自己的信息
+	repeated FriendMsgUnit msg_lst 			= 4;//好友消息
+	optional bool agree 					= 5;//用在MAIN_BE_ADD_FRIEND_RSP协议里面，true为对方同意，false为添加好友
+	optional uint64 timestamp 				= 6;//服务器当前时间
+	repeated AwardUnit gift 				= 7;//领取的赠送礼包奖励
+	optional uint32	max_day_get_gift_num	= 8;//每日最多领取多少个好友的赠送奖励，配置，在MAIN_SHOW_FRIEND_LIST_RSP回包中有意义
+	optional uint32 max_friend_num			= 9;//最大好友个数，配置，在MAIN_SHOW_FRIEND_LIST_RSP回包中有意义
+	optional uint32 day_get_gift_num		= 10;//今日已经领取礼包的个数，在MAIN_FRIEND_GIFT_GET_RSP和MAIN_SHOW_FRIEND_LIST_RSP回包中有意义
+}
+
+//vgs start
+message cs_vgs
+{
+	optional uint32 id = 1;//vgs id
+}
+
+message sc_vgs
+{
+	optional uint32 result = 1;
+	optional uint32 id = 2; //vgs id
+	optional uint64 uid = 3; //哪个用户发的
+}
+//vgs end
+
+message cs_rank
+{
+	optional uint32 ranktype = 1;//RANK_TYPE common_pb.proto
+	optional uint32 one_page_num = 2;//一页的个数，如果取好友的排行不需要填
+	optional uint32 page_num = 3;//取第几页，如果取好友的排行不需要填
+}
+
+message rank_unit
+{
+	optional uint64 uid = 1;
+	optional uint32 rankpos = 2; //排行榜位置
+	optional uint32 score = 3; //分数
+	optional bytes name = 4; //昵称
+	optional uint32 level = 5;//等级
+	optional uint32 icon_id = 6;//icon id
+}
+
+message sc_rank
+{
+	optional uint32 result = 1;
+	repeated rank_unit rankunit = 2;
+	optional rank_unit selfunit = 3;//自己的排行榜相关信息
+	optional uint32 season_end_countdown = 4;//离赛季结束还有多少秒
+	optional uint32 ranktype = 5;//RANK_TYPE common_pb.proto，带回请求的ranktype
+}
+
+message cs_surrender
+{
+	optional uint64 uid = 1;
+	optional bool surrender = 2;//投降设置为true，拒绝投降设置为false
+}
+
+message sc_surrender
+{
+	optional uint32 result = 1;
+	optional uint64 uid = 2;//谁发出的投降请求
+	optional bool surrender_done = 3;//字段为true表示uid所在队伍完成了投降，1v1，2v2同理
+	optional uint32 team = 4;//uid所在的队伍
+	optional uint32 player_id = 5;//uid对应的play id
+}

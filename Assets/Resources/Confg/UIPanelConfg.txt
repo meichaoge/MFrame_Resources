@@ -1,0 +1,116 @@
+[
+  {
+    "PanelName": "UIMainCanvasView",
+    "PanelPath": "UIMainCanvasView",
+    "m_UIPanelLevel": 0,
+    "IsParentRoot": true
+  },
+  {
+    "PanelName": "UILoginView",
+    "PanelPath": "UILoginView",
+    "m_UIPanelLevel": 2,
+    "IsParentRoot": true
+  },
+  {
+    "PanelName": "UIRegistAccountView",
+    "PanelPath": "UIRegistAccountView",
+    "m_UIPanelLevel": 2,
+    "IsParentRoot": true
+  },
+  {
+    "PanelName": "UIRoom",
+    "PanelPath": "UIRoom",
+    "m_UIPanelLevel": 0,
+    "IsParentRoot": false
+  },
+  {
+    "PanelName": "UIRoomView_Create",
+    "PanelPath": "UIRoomView_Create",
+    "m_UIPanelLevel": 0,
+    "IsParentRoot": false
+  },
+  {
+    "PanelName": "UIRoomView",
+    "PanelPath": "UIRoomView",
+    "m_UIPanelLevel": 0,
+    "IsParentRoot": false
+  },
+  {
+    "PanelName": "UIRoomDetailView",
+    "PanelPath": "UIRoomDetailView",
+    "m_UIPanelLevel": 0,
+    "IsParentRoot": false
+  },
+  {
+    "PanelName": "UIBrowserView",
+    "PanelPath": "UIBrowserView",
+    "m_UIPanelLevel": 0,
+    "IsParentRoot": false
+  },
+  {
+    "PanelName": "UIFavoriteView",
+    "PanelPath": "UIFavoriteView",
+    "m_UIPanelLevel": 0,
+    "IsParentRoot": false
+  },
+  {
+    "PanelName": "BrowserViewPort",
+    "PanelPath": "BrowserViewPort",
+    "m_UIPanelLevel": 0,
+    "IsParentRoot": true
+  },
+  {
+    "PanelName": "UIBrowser",
+    "PanelPath": "UIBrowser",
+    "m_UIPanelLevel": 0,
+    "IsParentRoot": false
+  },
+  {
+    "PanelName": "UIFriendView",
+    "PanelPath": "UIFriendView",
+    "m_UIPanelLevel": 0,
+    "IsParentRoot": false
+  },
+  {
+    "PanelName": "UICameraView",
+    "PanelPath": "UICameraView",
+    "m_UIPanelLevel": 0,
+    "IsParentRoot": false
+  },
+  {
+    "PanelName": "UIRecommendRoomDetailView",
+    "PanelPath": "UIRecommendRoomDetailView",
+    "m_UIPanelLevel": 0,
+    "IsParentRoot": false
+  },
+  {
+    "PanelName": "UIMessageView",
+    "PanelPath": "UIMessageView",
+    "m_UIPanelLevel": 0,
+    "IsParentRoot": false
+  },
+  {
+    "PanelName": "UISytemMailView",
+    "PanelPath": "UISytemMailView",
+    "m_UIPanelLevel": 0,
+    "IsParentRoot": false
+  },
+  {
+    "PanelName": "UIChannelMailView",
+    "PanelPath": "UIChannelMailView",
+    "m_UIPanelLevel": 0,
+    "IsParentRoot": false
+  },
+  {
+    "PanelName": "UIVoiceMailView",
+    "PanelPath": "UIVoiceMailView",
+    "m_UIPanelLevel": 2,
+    "IsParentRoot": true
+  },
+  {
+    "PanelName": "UIMainView",
+    "PanelPath": "UIMainView",
+    "m_UIPanelLevel": 0,
+    "IsParentRoot": false
+  }
+]

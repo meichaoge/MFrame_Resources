@@ -1,0 +1,149 @@
+{
+
+  "Login": {
+  },
+
+  "Guide": {
+  "UISystemAnnouncement": {
+      "position": "2.9,1.8,0",
+      "localAngle": "0,90,0",
+      "localScale": "0.003,0.003,0.001",
+      "size": "1280,960,0",
+      "sourcePath": "Prefabs/UI/Panel/UISystemAnnouncement"
+    }
+
+  },
+
+  "MainLobby":
+  {
+  "UISystemActivitiesView": {
+      "position": "41.75,5.87,12.03",
+      "localAngle": "0,9.33,0",
+      "localScale": "0.009,0.008,0.003",
+      "size": "1280,960,0",
+      "sourcePath": "Prefabs/UI/Panel/UISystemActivitiesView"
+    }
+  },
+
+  "Concert": {
+    "Android_FullBrowser": {
+      "position": "0.6,4.05,-8.17",
+      "localAngle": "0,180,0",
+      "localScale": "11.731,8.772,0.001",
+      "size": "1280,960,0",
+      "sourcePath": "Prefabs/UI/Panel/Else/Android_FullBrowser"
+    },
+     "PC_FullBrowser": {
+      "position": "0.61,4.09,-8.1",
+      "localAngle": "0,180,0",
+      "localScale": "0.011,0.0114,0.0066",
+      "size": "1024,768,0",
+      "sourcePath": "Prefabs/UI/Panel/Else/PC_FullBrowser"
+    },
+
+	"UIMessageBoardView":[	  
+	 {
+      "position": "8.5,5.02,-7.2",
+      "localAngle": "0,160.46,0",
+      "localScale": "1,1,1",
+      "size": "1024,768,0",
+      "sourcePath": "Prefabs/UI/Panel/UIMessageBoard"
+    },
+	 {
+      "position": "-8.5,5.02,-7.2",
+      "localAngle": "0,193,0",
+      "localScale": "1,1,1",
+      "size": "1024,768,0",
+      "sourcePath": "Prefabs/UI/Panel/UIMessageBoard"
+    }
+	  ]
+
+  },
+
+  "PartyRoom": {
+  },
+
+  "Panorama360": {
+    "360Texture": [
+      {
+        "position": "0.519, 1.0992, 0.5152",
+        "localAngle": "0,0,0",
+        "localScale": "0.005, 0.005, 0.005",
+        "size": "1920,1080,0",
+        "sourcePath": "Prefabs/UI/Panel/Else/360texture"
+      },
+      {
+        "position": "0.658, 1.0992,0.3388357",
+        "localAngle": "0,0,0",
+        "localScale": "0.005, 0.005, 0.005",
+        "size": "1920,1080,0",
+        "sourcePath": "Prefabs/UI/Panel/Else/360texture"
+      },
+      {
+        "position": "0.7289999, 1.0992, 0.1189337",
+        "localAngle": "0,0,0",
+        "localScale": "0.005, 0.005, 0.005",
+        "size": "1920,1080,0",
+        "sourcePath": "Prefabs/UI/Panel/Else/360texture"
+      }
+
+
+    ]
+  },
+
+ "Antiquaty": {
+	"Android_FullBrowser": {
+      "position": "-0.39,4.36,-0.24",
+      "localAngle": "0,90,0",
+      "localScale": "8.864,6.6,0",
+      "size": "1280,960,0",
+      "sourcePath": "Prefabs/UI/Panel/Else/Android_FullBrowser"
+    },
+     "PC_FullBrowser": {
+      "position": "-0.39,4.34,-0.24",
+      "localAngle": "0,90,0",
+      "localScale": "0.0086,0.0086,0.001",
+      "size": "1024,768,0",
+      "sourcePath": "Prefabs/UI/Panel/Else/PC_FullBrowser"
+    }
+  },
+
+  
+
+   "Athena": {
+   "UIScoreView_Athena": {
+		 "position": "-13,5.3,-9.2",
+		"localAngle": "90,90,0",
+		"localScale": "0.65,1,0.65",
+		 "size": "1,1,0",
+		 "sourcePath": "Prefabs/UI/Panel/GameScene/UIScoreView_Athena"
+		},
+		"UIGameRecordView_Ahena": {
+		 "position": "-13,5.3,-9.2",
+		"localAngle": "90,90,0",
+		"localScale": "0.7,1,0.7",
+		 "size": "1,1,0",
+		 "sourcePath": "Prefabs/UI/Panel/GameScene/UIGameRecordView_Ahena"
+		}
+  },
+
+
+
+     "Conference":  {
+		"Android_FullBrowser": {
+		 "position": "16.97,7.7,-0.03",
+		"localAngle": "0,90,0",
+		"localScale": "18.812,13.11,0.001",
+		 "size": "1280,960,0",
+		 "sourcePath": "Prefabs/UI/Panel/Else/Android_FullBrowser"
+	  },
+     "PC_FullBrowser": {
+		 "position": "17.09,7.62,-0.01",
+		"localAngle": "0,90,0",
+		"localScale": "0.0184,0.017,0.01",
+		 "size": "1024,768,0",
+		 "sourcePath": "Prefabs/UI/Panel/Else/PC_FullBrowser"
+		}
+	 }
+
+}

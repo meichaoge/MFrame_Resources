@@ -1,0 +1,5 @@
+礼物ID, 名称,图标名称,拥有者
+m_ID,m_Name,m_ImageName,m_OwnerType
+1,P_Cupid_test_all_sanjian,gift_Cupit,0
+2,LightStick,light_Stick,1
+3,Tie,tie,1

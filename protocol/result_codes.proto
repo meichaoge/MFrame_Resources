@@ -1,0 +1,371 @@
+syntax = "proto2";
+//option optimize_for = LITE_RUNTIME;
+package protocol;
+
+
+// 交易返回码列表
+enum net_rev_status
+{
+	//错误码无需在位上做不同的定义，增加无谓的理解和维护成本
+	//直接使用十进制递增定义
+	DEFAUTLT_CODE = -1; //默认的值
+	RESULT_OK = 0; // 成功
+	GOLD_NOT_ENOUGH = 1; //金币不足
+	DIAMOND_NOT_ENOUGH = 2; //钻石不足
+	NOT_FIND_FRIEND = 3;//没有搜索到好友
+	NOT_ADD_SELF_FRIEND = 4;//不能添加自己作为好友
+	NOT_REPEAT_ADD_FRIEND = 5;//重复添加好友
+	NOT_OFTEN_INVITE_FRIEND = 6;//不能频繁邀请好友
+	STONE_NOT_ENOUGH = 7;//宝石不够
+	TECH_POINT_NOT_ENOUGH = 8;//科技点不足
+	TOTAL_TECH_POINT_NOT_ENOUGH = 9;//投入科技点不足
+	NICKNAME_ALREADY_EXISTS = 10;//昵称已经存在，昵称重复
+	ALREADY_EXISTS_SAME_TYPE_UNLOCK_CHEST = 11;//同时只能解锁一个同类型宝箱
+	NOT_SURRENDER_TIME_IS_INVALID = 12;//不能发起投降，还没有到指定时间
+	DAY_STRENGTH_BUY_NUM_MAX = 13;//今天购买体力的次数已经最大	
+	TEAM_LEVEL_NOT_ENOUGH = 14;//队伍等级不足
+	NEED_PASS_BEFORE_CHECKPOINT = 15;//需要通过前置关卡	
+	ALREADY_MAX_PVE_FIGHT_NUM = 16;//关卡每日挑战次数已经最大
+	EXP_WATER_NOT_ENOUGH = 17;//经验药水不足
+	GOD_IS_LOCK = 18;//英雄是锁定的
+	COMMON_FRAGMENT_NOT_ENOUGH = 19;//万能碎片不足
+	GOD_EXP_MAX = 20;//英雄经验已经最大
+	NEED_THREE_STAR_PASS_RAID = 21;//需要三星过关才能扫荡
+	DAY_RESET_CHECKPOINT_MAX = 22;//每日关卡重置次数最大
+	FRIEND_ALREADY_INGAME = 23;//好友已经在战斗中
+	AWARD_ALREADY_GET = 24;//奖励已经领取
+	DAY_FRESH_SD_MAX = 25;//每日刷新商店的次数已经最大
+	ARENA_LEVEL_NOT_ENOUGH = 26;//竞技场等级不足
+	GOD_LEVEL_NOT_ENOUGH = 27;//英雄等级不足
+	GOD_TALENT_POINT_NOT_ENOUGH = 28;//英雄天赋点不足
+	GOD_TALENT_NEED_UNLOCK = 29;//需要解锁天赋
+	MATERIAL_NOT_ENOUGH = 30;//材料不足
+	DAIBI_NOT_ENOUGH = 31;//代币不足
+	FRIEND_GIFT_NOT_PRESENTED = 32;//好友礼物没有被赠送
+	FRIEND_GIFT_DAY_GOT_TIMES_MAX = 33;//好友礼物每日领取次数达到最大
+	NICK_NAME_OVERSIZE = 34;//昵称长度超出限制或者不足
+	SIGN_CONTEXT_OVERSIZE = 35;//个性签名长度超出限制
+	NICK_NAME_MODIFY_COOLDOWN = 36;//当前时间还不能修改昵称
+	NICK_NAME_REGEX_INVALID	= 37;//昵称不能包含特殊字符
+	NICK_NAME_CONTAIN_DIRTY_WORD = 38;//昵称包含敏感词
+	FRIEND_GIFT_ALREADY_GET = 39;//已经领取了赠送礼包
+	ACCOUNT_NAME_INVALID = 40;//注册的账号名非法，规则位字母开头，可包含数字，长度1到16
+	GOD_TELENT_NEED_SKILL_ACTIVE = 41;//需要激活技能才激活天赋	
+	GOD_FRAGMENT_NOT_ENOUGH = 42;//英雄碎片不足
+	SHOP_GOODS_BUY_NUM_MAX = 43;//商城道具每日购买达到上限
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	
+	//下面是老的错误码定义，不在修改后面的，直接在上面这部分递增，也不需要在log的定义上区分log等级，自己在输出的时候用新的log调用指定用不同的级别输出即可
+	/////////////////////////////////////////////
+	ERROR_START = 10000;
+	ERROR_SYSTEM_MAINTENANCE                                                        = 10001; // 系统维护
+    ERROR_SYSTEM_NOT_SUPPORT                                                        = 10002; // 服务器处理不支持
+	ERROR_OUT_OF_MEMORY                                                             = 10003; // 内存错误
+    ERROR_LOGIN_ACCOUNT_LOCKED                                                      = 10004; // 帐号被锁定
+    ERROR_LOGIN_UID_NOT_EXIST                                                       = 10005; // UID不存在
+    ERROR_LOGIN_WRONG_TOKEN                                                         = 10006; // 错误的Token
+    ERROR_TIME_NOT_OUT_FOR_CHEST_OPEN                                               = 10007; // 开箱时间没有到
+    ERROR_ROLE_NOT_EXIST_WHEN_LOGOUT                                                = 10008; // 退出是角色信息不存在
+    ERROR_GAME_RSP_INVALID_MATCHID_WHEN                                             = 10009; // GameSrv返回的错误MatchId 与角色matchid 不匹配
+    ERROR_NOT_MATCH_COMBAT_OR_MATCH_ID_WHEN_REWARD                                  = 10010; // GameSrv返回的错误MatchId 与角色matchid 不匹配
+    ERROR_GET_PVE_CONFIG_FAILED_FOR_INVALID_MAPID                                   = 10011; // 获取PVE配置失败， 无效的地图
+    ERROR_GET_PVE_SOLDIER_ATTR_CONFIG_FAILED_FOR_INVALID_SOLDIER_ID                 = 10012; // 获取PVE士兵属性失败， 无效的士兵id
+    ERROR_GET_PVE_SOLDIER_ATTR_FAILED_FOR_INVALID_SOLDIER_LEVEL                     = 10013; // 获取PVE士兵属性失败， 无效的士兵等级
+    ERROR_GET_PVE_TOWER_ATTR_FAILED_FOR_INVALID_TOWNER_LEVEL                        = 10014; // 获取PVE塔属性失败， 无效的塔等级
+    ERROR_GET_PVE_MAGIC_SOLDIER_ATTR_FAILED_FOR_INVALID_MS_LEVEL                    = 10015; // 获取PVE魔法士兵属性失败， 无效的魔法士兵等级
+    ERROR_GET_GOD_SKILL_CONFIG_FAILED_FOR_INVALID_SKILL_ID                          = 10016; // 获取God SkillConfig失败， 无效的技能id
+    ERROR_GET_GOD_SKILL_PBINFO_FAILED_FOR_INVALID_SKILL_LEVEL                       = 10017; // 获取God 技能PBinfo失败， 无效的技能等级
+    ERROR_GOD_UPGRADE_FAILED_FOR_INVALID_GODID                                      = 10018; // God 升级失败， 无效的god id
+    ERROR_GOD_SKILL_UPGRADE_FAILED_FOR_INVALID_GODID                                = 10019; // God 技能升级失败， 无效的godid
+    ERROR_GOD_SKILL_UPGRADE_FAILED_FOR_INVALID_SKILLID                              = 10020; // God 技能升级失败， 无效的god 技能id
+    ERROR_GET_GOD_SKILL_CONFIG_FAILED                                               = 10021; // 获取God技能配置失败
+    ERROR_GET_GOD_SKILL_ATTR_FAILED                                                 = 10022; // 获取God技能属性失败
+    ERROR_GET_PVP_CONFIG_FAILED_FOR_INVALID_MAPID                                   = 10023; // 获取PVP配置失败， 无效的地图
+    ERROR_GET_PVP_SOLDIER_ATTR_CONFIG_FAILED_FOR_INVALID_SOLDIER_ID                 = 10024; // 获取PVP士兵属性失败， 无效的士兵id
+    ERROR_GET_PVP_SOLDIER_ATTR_FAILED_FOR_INVALID_SOLDIER_LEVEL                     = 10025; // 获取PVP士兵属性失败， 无效的士兵等级
+    ERROR_GET_PVP_TOWER_ATTR_FAILED_FOR_INVALID_TOWNER_LEVEL                        = 10026; // 获取PVP塔属性失败， 无效的塔等级
+    ERROR_GET_PVP_MAGIC_SOLDIER_ATTR_FAILED_FOR_INVALID_MS_LEVEL                    = 10027; // 获取PVP魔法士兵属性失败， 无效的魔法士兵等级
+    ERROR_READ_CONFIG_GOD_SKILL_LEVEL                                               = 10028; // 初始化技能,等级错误
+    ERROR_GET_PVP_CONFIG_FAILED_FOR_INVALID_TEAMID                                  = 10029; // 获取PVP配置失败， 无效的Team ID
+	ERROR_UNLOCK_GOD_SKILL_FAILED_FOR_INVALID_GOD_ID                                = 10030; //
+    ERROR_UNLOCK_GOD_SKILL_FAILED_FOR_INVALID_SKILL_ID                              = 10031; //
+    ERROR_UNLOCK_GOD_SKILL_FAILED_FOR_NOT_ENOUGH_SKILL_STONE                        = 10032; //
+    ERROR_UNLOCK_GOD_SKILL_FAILED_FOR_NOT_ENOUGH_GOD                                = 10033; //
+    ERROR_UNLOCK_GOD_SKILL_FAILED_FOR_NOT_ENOUGH_SKILL_POINT                        = 10034; //
+    ERROR_UNLOCK_GOD_SKILL_FAILED_FOR_GOD_LEVEL_LIMIT                               = 10035; //
+    ERROR_UNLOCK_GOD_FAILED_FOR_INVALID_LOCK_GOD_ID                                 = 10036; //
+    ERROR_UNLOCK_GOD_FAILED_FOR_NOT_ENOUGH_UNLOCK_FRAGMENT                          = 10037; //
+    ERROR_UNLOCK_GOD_FAILED_FOR_NOT_ENOUGH_GOD                                      = 10038; //
+    ERROR_NOT_EXIST_GOD_WHEN_ANALYSIS_COMBAT_PLAYER                                 = 10039; //
+    ERROR_CAN_NOT_FIND_COMBAT_TEAM_INFO                                             = 10040; //
+    ERROR_ALIAS_NAME_NOT_EXIST                                                      = 10041; //
+    ERROR_THE_KEY_OF_ALIAS_NAME_NOT_EXIST                                           = 10042; //   
+    ERROR_GOD_ID_NOT_EXIST                                                          = 10043; //
+    ERROR_CHEST_ID_NOT_EXIST                                                        = 10044; //
+    ERROR_GEMS_RECHARGE_FOR_PAY_OFF_FAILED                                          = 10045; //	
+    ERROR_CAN_NOT_CALC_RANK_SCORE_FOR_NOT_EXIST_K_VALUE_CONFIG                      = 10046; //
+    ERROR_PVP_FRAME                                                                 = 10047; // 错误的PVP帧数
+    ERROR_PVP5_SYN_FRAME_FAILED                                                     = 10048; // 同步下一帧失败
+    ERROR_COMBAT_INFO_NULL                                                          = 10049; // 对战信息为空错误	
+	ERROR_INVALID_MATCH_DONE_REQ_FOR_SAME_UIDS                                      = 10050; // 请求MATCH Done时，uida和uidb一样
+    ERROR_MATCH_ISEXIST                                                             = 10051; // 已经在匹配中
+    ERROR_MATCH_P_STATE                                                             = 10052; // 玩家状态不对，不允许匹配
+    ERROR_MATCH_INFO                                                                = 10053; // 匹配信息错误
+    ERROR_CLIENT_REQUEST_FRAME_MORE_THEN_SERVER                                     = 10054; //
+    ERROR_COMBAT_INFO_NOT_EXIST_WHEN_VERIFY                                         = 10055; // game 验证时找不到combat info
+    ERROR_IDENTIFY_VERIFY_FAILD                                                     = 10056; // 验证identify 错误
+    ERROR_ClIENT_CONNECT_FD_INVALID                                                 = 10057; // 无效的client connect fd
+    ERROR_PVP5_SYNC_DATA_FAILDED_FOR_INVALID_REQUEST_FRAME_NO                       = 10058; // 无效的同步帧数值
+	ERROE_INVALID_PVP_MATCH_REQUEST_FOR_REPEAT_UID                                  = 10059; // pvp 请求信息用包含重复的uid信息
+	ERROR_INVALID_PLAYER_POS_WHEN_CHOOSE_GODS                                       = 10060;
+    ERROR_SET_LOBBY_MATCH_READY_NOTIFY_MSG_FAILED                                   = 10061;
+    ERROR_COMBAT_MATCH_NOTIFY_INFO_HAS_NO_CS_PVP_MATCH_WHEN_1V1_PREMADE             = 10062;
+    ERROR_AUTO_CHOOSE_GOD_NOT_ENOUGH_GOD_COUNT                                      = 10063;
+    ERROR_AUTO_CHOOSE_GOD_NOT_ENOUGH_POS_COUNT                                      = 10064;
+    ERROR_LOBBY_CHOOSE_GOD_MODE                                                     = 10065;
+    ERROR_LOBBY_CHOOSE_GOD_STATUS                                                   = 10066;
+    ERROR_LOBBY_CHOOSE_GOD_ASK_PACKET                                               = 10067;
+	    // for net packet                                                             
+    ERROR_PARSE_PACKET                                                              = 10069; // 解析包错误
+    ERROR_MESSAGE_FORMAT                                                            = 10070; // 消息格式错误
+    ERROR_ASK_MESSAGE_NULL                                                          = 10071; // 请求消息包为空
+    ERROR_PACKET_INVALID                                                            = 10072; // 无效的net packet包
+    ERROR_PACKET_CS_PVP5_FRAME_MISSING                                              = 10073; // 包缺CS_PVP5_FRAME
+    ERROR_PACKET_COMMAND                                                            = 10074; // 错误的command请求
+    ERROR_PACKET_PARSE_ROLEINFO_RSP                                                 = 10075; // 请求roleinfo回复一个错误ret
+    ERROR_PACKET_WHEN_SERIALIZE_TO_ROLE_INFO                                        = 10076; // 网络包序列化 roleinfo失败
+    ERROR_PACKET_WHEN_SERIALIZE_TO_ROLE_REGISTER_INFO                               = 10077; // 网络包序列化 regisger info失败
+    ERROR_PACKET_CS_PVP5_FRAME_END_MISSING                                          = 10078; // 网络包 cs_pvp5_frame_end 缺失
+    ERROR_PACKET_CS_PVP_REWARD_MISSING                                              = 10079; // 网络包 cs_pvp_reward 缺失
+    ERROR_PACKET_CS_LOGIN_MISSING                                                   = 10080; // 网络包 cs_login 缺失
+    ERROR_PACKET_DATA_MISSING                                                       = 10081; // 网络包 data 缺失
+    ERROR_PACKET_CS_GET_ROLE_INFO_MISSING                                           = 10082; // 网络包 cs_get_role_info 缺失
+    ERROR_PACKET_CS_GET_GODS_INFO_MISSING                                           = 10083; // 网络包 cs_get_god_info 缺失
+    ERROR_PACKET_CS_UPGRADE_GOD_MISSING                                             = 10084; // 网络包 cs_upgrade_god 缺失
+    ERROR_PACKET_CS_ASK_PVE_MISSING                                                 = 10085; // 网络包 cs_ask_pve 缺失
+    ERROR_PACKET_CS_ASK_PVE_END_MISSING                                             = 10086; // 网络包 cs_ask_pve_end 缺失
+    ERROR_PACKET_CS_GET_CHEST_INFO_MISSING                                          = 10087; // 网络包 cs_get_chest_info 缺失
+    ERROR_PACKET_CS_UNLOCK_CHEST_MISSING                                            = 10088; // 网络包 cs_unlock_chest 缺失
+    ERROR_PACKET_CS_OPEN_CHEST_MISSING                                              = 10089; // 网络包 cs_open_chest 缺失
+    ERROR_PACKET_CS_PVP_MATCH_CANCEL_MISSING                                        = 10090; // 网络包 cs_pvp_match_cancel 缺失
+    ERROR_PACKET_CS_PVP_MATCH_MISSING                                               = 10091; // 网络包 cs_pvp_match 缺失
+    ERROR_PACKET_PBPVP5_CREATEINFO_MISSING                                          = 10092; // 网络包 PbPvpCombatInfo 缺失
+    ERROR_PACKET_CS_GAME_PVP5_VERIFY_MISSING                                        = 10093; // 网络包 cs_game_pvp5_verify 缺失
+    ERROR_PACKET_CS_UPGRADE_SKILL_MISSING                                           = 10094; // 网络包 cs_upgrade_skill 缺失
+    ERROR_PACKET_CS_GET_COPY_INFO_MISSING                                           = 10095; // 网络包 cs_get_copy_info 缺失
+    ERROR_PACKET_CS_GET_LINEUP_INFO_MISSING                                         = 10096; // 网络包 cs_get_lineup_info 缺失
+    ERROR_PACKET_CS_SET_LINEUP_INFO_MISSING                                         = 10097; // 网络包 cs_set_lineup_info 缺失
+    ERROR_PACKET_CS_PVP5_FRAME_SYNC_DATA_MISSING                                    = 10098; // 网络包 cs_pvp5_frame_sync_data 缺失
+    ERROR_PACKET_CS_UNLOCK_SKILL_MISSING                                            = 10099; // 网络包 cs_unlock_skill 缺失
+    ERROR_PACKET_CS_UNLOCK_GOD_MISSING                                              = 10100; // 网络包 cs_unlock_god 缺失
+    ERROR_PACKET_CS_COMBAT_ACCEPT_ACK_MISSING                                       = 10101; // 网络包 cs_combat_accept_ack 缺失
+    ERROR_PACKET_CS_PVP_CHOOSE_GODS_MISSING                                         = 10102; // 网络包 cs_pvp_choose_gods 缺失
+    ERROR_PACKET_CS_PVP_CHOOSE_GODS_ACK_MISSING                                     = 10103; // 网络包 cs_pvp_choose_gods_ack 缺失
+    ERROR_PACKET_CS_PVP_CHOOSE_GODS_CONFIRM_MISSING                                 = 10104; // 网络包 cs_pvp_choose_gods_confirm 缺失
+    ERROR_PACKET_CS_GET_ALIAS_NAME_MISSING                                          = 10105; // 
+    ERROR_PACKET_CS_SET_ALIAS_NAME_MISSING                                          = 10106; // 
+    ERROR_PACKET_CS_GOD_CARD_PURCHASE_MISSING                                       = 10107; // 网络包 cs_god_card_purchase 缺失
+    ERROR_PACKET_CS_CHEST_PURCHASE_MISSING                                          = 10108; // 网络包 cs_chest_purchase 缺失
+    ERROR_PACKET_CS_GEMS_RECHARGE_MISSING                                           = 10109; // 网络包 cs_gems_recharge 缺失
+    ERROR_PACKET_PS_GEMS_RECHARGE_NOTIFY_MISSING                                    = 10110; // 网络包 ps_gems_recharge_notify 缺失
+    ERROR_PACKET_CS_GOLD_PURCHASE_MISSING                                           = 10111; // 网络包 cs_gold_purchase 缺失
+    ERROR_PACKET_CS_GET_STORE_INFO_MISSING                                          = 10112; // 网络包 cs_get_store_info 缺失
+                                                                                      
+    // for init                                                                       
+    ERROR_INIT_NETWORK                                                              = 10115; // 初始化网络错误
+    ERROR_INIT_GAME_WORLD                                                           = 10116; // 初始化GameWorld错误
+    ERROR_INIT_LOGIC_PROCESS                                                        = 10117; // 初始化逻辑错误
+    ERROR_INIT_TEAM_INITIALZE                                                       = 10118; // 初始化角色队伍失败
+    ERROR_WHEN_LOAD_ROLE_GOD_PROPERY                                                = 10119; // 初始化神明属性配置信息错误
+    ERROR_WHEN_INIT_UPDRAD_GOD_INFO                                                 = 10120; // 初始化神明升级配置信息错误
+    ERROR_INIT_GOD_SKILL_ID                                                         = 10121; // 初始化技能属性失败，id错误
+    ERROR_INIT_TEAM_FOR_INALID_TEAM_LV_WHEN_INIT_UPGRRAD_EXP                        = 10122; // 初始化队伍升级属性失败，level错误
+    ERROR_LOAD_GOD_PROP_FOR_INVALID_GOD_LEVEL                                       = 10123; //
+    ERROR_LOAD_GOD_UNLOCK_SKILL_FOR_INVALID_SKILL_ID                                = 10124; //
+    ERROR_WHEN_LOAD_ROLE_LOCK_GOD_PROPERY                                           = 10125; //
+    // for config                                                                   = 10127
+    ERROR_FIND_CONFIG_INFO                                                          = 10128; // 寻找配置数据失败
+    ERROR_CONFIG_DATA                                                               = 10129; // 不合理的配置数据
+    ERROR_DROP_RAND                                                                 = 10130; // 不合理的掉落随机结果
+    // for the respone, like respone an error code, or package missing.               
+    ERROR_RSP_ERROR_RET                                                             = 10133; // 相应回复错误的结果
+    // for user                                                                       
+    ERROR_USER_NOT_EXIST                                                            = 10136; // 用户id不存在错误
+    ERROR_USER_UID_INVALID                                                          = 10137; // 用户id无效错误
+    ERROR_USER_NOT_LOGIN                                                            = 10138; // 用户没有登录错误
+    ERROR_USER_STATE_IS_OFFLINE                                                     = 10139; // 用户已经离线错误
+	INVALID_GOD_ID_WHEN_GET_PVE_TEAMINFO                                            = 10140; //
+    INVALID_TEAM_INFO_WHEN_ID_FOR_NO_PLAYER                                         = 10141; //
+	FAILED_GOLD_PURCHASE_FOR_NOT_ENOUGH_GMES                                        = 10142; //
+    FAILED_CHEST_PURCHASE_FOR_NOT_ENOUGH_GOLD_OR_GMES                               = 10143; //
+    FAILED_GOD_CARD_PURCHASE_FOR_NOT_ENOUGH_GOLD_OR_GMES                            = 10144; //
+	INVALID_POP_FRAME                                                               = 10145; //
+    INVALID_CS_PVP_FRAME_REQ_FRAME                                                  = 10146; //
+    INVALID_CS_PVP_SYNC_DATA_FRAME                                                  = 10147; //
+    INVALID_SYNC_ID                                                                 = 10148; //
+    COMBAT_FRAME_DATA_IS_NOT_MARK_SYNC                                              = 10149; //
+    INVALID_USER_ID_WHEN_FIND_MATCH_ID                                              = 10151;
+    INVALID_MATCH_ID_WHEN_FIND_LOBBY_COMBAT_INFO                                    = 10152;
+    INVALID_USER_ID_WHEN_FIND_LOBBY_PLAYER_INFO                                     = 10153;
+	INVALID_ROLE_STATE_WHEN_PVE_ASK                                                 = 10154; //
+    INVALID_LINEUP_INFO                                                             = 10155; //
+	INFO_INVALID_GODID_WHEN_GET_GOD_CONFIG                                          = 10156; // 获取英雄配置失败， 无效的英雄id
+	ERROR_PVP5_SYN_DATA_FAILED                                                      = 10157; //
+    ERROR_PVP5_SYN_FRAME_CRC_WRONG                                                  = 10158; //
+	ERROR_DB_KEY_NOT_EXIST                                                          = 10159; // 数据库key不存在
+    ERROR_DB_WRITE_FAIL                                                             = 10160; // 数据库写入失败
+    ERROR_DB_READ_FAIL                                                              = 10161; // 数据库读取失败
+    ERROR_DB_WRONG_UID                                                              = 10162; // UID错误
+    ERROR_DB_WRONG_TYPE                                                             = 10163; // 错误的数据库类型
+	ERROR_END   = 20000;
+	/////////////////////////////////////////////
+	
+	/////////////////////////////////////////////
+	DEBUG_START = 30000;
+	DEBUG_INVALID_ROLE_STATE_WHEN_GAME_LOGOUT_REQ                                   = 30001; //
+    DEBUG_INVALID_ROLE_GAME_TBUSID_WHEN_GAME_LOGOUT_REQ                             = 30002; //
+    DEBUG_CHEST_DONT_UNLOCK_WHEN_OPEN                                               = 30003; //
+	FAILED_FOR_ALIAS_NAME_EXIST                                                     = 30004; //
+	DEBUG_PVP5_SYN_FRAME_WAIT                                                       = 30005; //
+    DEBUG_PVP5_SYN_DATA_WAIT                                                        = 30006; //
+    DEBUG_NOT_EXIST_GAME_COMBAT_INFO_BY_UID                                         = 30007; //
+    DEBUG_NOT_EXIST_GAME_COMBAT_PLAYER_INFO_BY_UID                                  = 30008; //
+    DEBUG_ADD_FRAME_SYNC_RSQ_INFO                                                   = 30009; //
+    DEBUG_RM_FRAME_SYNC_RSQ_COMBAT_ID                                               = 30010; //
+    DEBUG_ADD_UID_TO_COMBAT_INFO                                                    = 30011; //
+    DEBUG_RM_UID_TO_COMBAT_INFO                                                     = 30012; //
+    DEBUG_ADD_CLIENT_ID_TO_UID_INFO                                                 = 30013; //
+    DEBUG_RM_CLIENT_ID_TO_UID_INFO                                                  = 30014; //
+	DEBUG_ADD_COMBAT_INFO                                                           = 30015; // 添加Combat info 信息
+    DEBUG_RM_COMBAT_INFO                                                            = 30016; // 删除Combat info 信息
+    DEBUG_ADD_COMBAT_CLIENT_INFO                                                    = 30017; // 添加Combat Clent Info 信息
+    DEBUG_RM_COMBAT_CLIENT_INFO                                                     = 30018; // 删除Combat Clent Info 信息
+	DEBUG_REPEATED_FRAME_SYNC_DATA_PACKAGES                                         = 30019; //
+    DEBUG_SYNC_DATA_SIZE_NOT_EQUAL_PLAYER_MAP_SIZE                                  = 30020; //
+    DEBUG_HAS_NO_SYNC_DATA_WHEN_SYNC_DATA                                           = 30021; //
+    DEBUG_SYNC_DATA_NOT_RECEIVE_ALL                                                 = 30022; //
+    DEBUG_HAS_NO_COMBAT_FRAME_DATA_WHEN_CALC_DIFF                                   = 30023; //
+    DEBUG_HAS_NO_DIFF_SYNC_DATA_UNIT                                                = 30024; //
+    DEBUG_REPEATED_PVP_OPERATIOIN_PACKET                                            = 30025; //
+    DEBUG_PLAYER_CHANGED_STATE_INACTIVE                                             = 30026; //
+    DEBUG_PLAYER_CHANGED_STATE_ACTIVE                                               = 30027; //
+    DEBUG_PLAYER_CHANGED_STATE_NOTIFY_DONE                                          = 30028; //
+	DEBUG_UNKNOW_PVP_TYPE_WHEN_PVP_REQUEST                                          = 30029; //
+    DEBUG_PLAYER_CHANGED_STATE                                                      = 30030; //
+    PVP_MATCH_FAILED                                                                = 30031;
+    PVBOT_CHOOSE_GODS_DONE_FAILED                                                   = 30032;
+    PVBOT_END_FAILED                                                                = 30033;
+    GET_SEASON_INFO_FAILED                                                          = 30034;
+    ANOTHER_COMBAT_IS_GOING_ON                                                      = 30035;
+    INVALID_CHAPTERID_OR_STAR_LEVEL                                                 = 30036;
+    NOT_ENOUGH_PHYSICAL_STRENGTH                                                    = 30037;
+    STAR_AWARD_ALREADY_OBTAINED                                                     = 30039;
+    NOT_UNLOCK_FOR_THE_DIFFICULTY                                                   = 30040;
+    UPPER_LIMIT_MAX_CHALLENGE                                                       = 30041;
+    NOT_EXIST_PANTHEON_ID                                                           = 30042;
+    NOT_EXIST_DIFFCULTY_LEVEL                                                       = 30043;
+    GET_PANTHEON_COMBAT_INFO_FAILED                                                 = 30044;
+    PANTHEON_NOT_OPEN                                                               = 30045;
+
+    // 光影战场
+    NOT_EXIST_LIGHTOM_ID                                                            = 30046;
+    GET_LIGHTOM_INFO_FAILED                                                         = 30047;
+    LIGHTOM_NOT_OPEN                                                                = 30048;
+    GET_LIGHTOM_COMBAT_INFO_FAILED                                                  = 30049;
+
+    // 远古战场
+    GET_ANCIENTBTF_INFO_FAILED                                                      = 30060;
+    ANCIENT_ID_NOT_EQ_CURR_TO_PASS_ID                                               = 30061;
+    ANCIENT_RAID_FAILED                                                             = 30062;
+    ANCIENT_RESET_FAILED                                                            = 30063;
+    ANCIENT_OPEN_CHEST_FAILED                                                       = 30064;
+    ANCIENT_INVALID_REVIVE_ID                                                       = 30065;
+    ANCIENT_BATTLE_END_FAILED                                                       = 30066;
+    ANCIENT_NOT_EXIST_OPP_LINEUP                                                    = 30067;
+    ANCIENT_NOT_EXIST_CHPT_INFO                                                     = 30068;
+    ANCIENT_NOT_EXIST_DB_UNIT_INFO                                                  = 30069;
+    ANCIENT_ALL_OPP_GOD_DIED                                                        = 30070;
+
+    // 邮件
+    MAIL_INVAILID_ID                                                                = 30080;
+
+    INVALID_CURR_CHPT_ID                                                            = 30075; // 光影，诸神等结束请求的时候关卡,难度等级和请求的时候不一样
+	DEBUG_END = 40000;
+	/////////////////////////////////////////////
+    
+
+	/////////////////////////////////////////////
+	INFO_START = 50000;
+    INVALID_LOGIN_REQ_NAME                                                          = 50001; // 错误的LoginReqInfo
+	INFO_ROLE_UPGRADE_FAILED_FOR_TOP_LEVEL                                          = 50002; // 神明升级失败，已经是最高级别了
+    INFO_INVALID_CHEST_ID                                                           = 50003; // 无效的宝箱id
+    INFO_INVALID_GODID_WHEN_OPEN_CHEST                                              = 50004; // 无效的神明id
+    INFO_GOD_UPGRADE_FAILED_FOR_TOP_LEVEL                                           = 50005; // 神明升级失败，已经是最高级别了
+    INFO_GOD_UPGRADE_FAILED_FOR_NOT_ENOUGH_FRAGMENT                                 = 50006; // 申明升级失败，没有足够的碎片
+    INFO_GOD_UPGRADE_FAILED_FOR_NOT_ENOUGH_GOLD                                     = 50007; // 申明升级失败，没有足够的金币
+    INFO_ROLE_CHEST_BUCKET_FULL                                                     = 50008; // 宝箱掉落时，宝箱占位已满
+    INFO_PVE_DEFEATED                                                               = 50009; // PEV对战结果被打败了
+    INFO_PVP_DEFEATED                                                               = 50010; // PVP对战结果被打败了
+    INFO_NOT_ENOUGH_DIAMOND_FOR_CHEST_OPEN                                          = 50011; // 打开宝箱失败，没有足够的钻石
+    INFO_TAKE_DIAMONDS_FOR_CHEST_OPEN                                               = 50012; // 用钻石打开宝箱
+    INFO_INVALID_ROLE_STATE_WHEN_ASK_MATCH                                          = 50013; // 无效的匹配请求，角色状态错误
+    INFO_INVALID_ROLE_STATE_WHEN_CANCEL_MATCH                                       = 50014; // 无效的取消匹配请求，角色状态错误
+	INFO_GOD_SKILL_UPGRADE_FAILED_FOR_TOP_LEVEL                                     = 50015; // God 技能升级失败， 已经最大技能等级了
+    INFO_GOD_SKILL_UPGRADE_FAILED_FOR_NOT_ENOUGH_GOLD                               = 50016; // God 技能升级失败，没有足够的金币
+    INFO_INVALID_GODID_WHEN_GET_PVP_CONFIG                                          = 50017;
+    INFO_INVALID_SKILLID_WHEN_GET_PVP_CONFIG                                        = 50018;
+	INFO_CHECKPOINT_ALREADY_PASSED                                                  = 50019; //
+    INFO_ASK_PVE_END_CHECKPOINT_NOT_IDENTIFY                                        = 50020; //
+    INFO_GOD_LOCK_SKILL_ALREADY_EXIST_IN_GOD_SKILL_LIST                             = 50021; //
+    INFO_LOCK_GOD_ALREADY_EXIST_IN_GOD_LIST                                         = 50022; //
+    INFO_GOD_SKILL_UPGRADE_FAILED_FOR_GOD_LEVEL_LIMIT                               = 50023; // God 技能升级失败, 英雄等级限制
+    INFO_UNLOCK_GOD_SKILL_FAILED_FOR_UNLOCKED                                       = 50024; // God Skill 已经解锁了
+    // for the game srv                                                               
+    INFO_PVP5_PLAY_NEXT_FRAME                                                       = 50027; // 同步下一帧错误
+    INVALID_ROLE_STATE_WHEN_FRAME_END                                               = 50028; // 结束帧同步失败，角色状态错误
+    INVALID_ROLE_COMBAT_INFO_WHEN_FRAME_END                                         = 50029; // 结束帧同步失败，错误的对战信息
+    INFO_DROP_PVE_OR_FETCH_CHEST_FAILED                                             = 50030; // 掉落或者获取PVE宝箱失败
+    INFO_DROP_PVP_OR_FETCH_CHEST_FAILED                                             = 50031; // 掉落或者获取PVP宝箱失败
+    INFO_INVALID_SYNC_NUM_WHEN_RECV_SYNC_DATA                                       = 50032; //
+    INFO_INVALID_FRAME_OF_SYNC_SUB_PACKAGES                                         = 50033; //
+    ERROR_PROCESSOR_RETURN_FALSE                                                    = 50034; //
+
+    // for the match srv                                                              
+    INFO_UNIMPLEMENT                                                                = 50035; // 还没有实现的功能
+    INFO_UNSUPPORT                                                                  = 50036; // 不支持的功能
+    INFO_USER_LOGIN_FAILED                                                          = 50037; // 用户登录失败
+    INFO_ROLE_ADD_BY_UID                                                            = 50038; // 通过uid增加角色信息
+    INFO_ROLE_RM_BY_UID                                                             = 50039; // 通过uid删除角色信息
+	ERROR_PVP_RESTORE_READY_FAIED                                                   = 50040; //
+    INFO_END = 60000;
+	/////////////////////////////////////////////
+	
+	WARN_START = 70000;
+	WARN_END  = 80000;
+};
+
+enum LOG_ID
+{
+	LI_bc 						= 1;//绑定账号
+	LI_reg 						= 2;//注册
+	LI_login 					= 3;//登录
+	LI_role_profile				= 4;//个人信息
+	
+	LI_pve						= 5;//副本
+	LI_pve_raid					= 6;//副本扫荡
+	
+	LI_light_bf					= 7;//光影战场
+	LI_light_bf_raid			= 8;//光影扫荡
+	
+	LI_ancient_bf				= 9;//远古战场
+	LI_ancient_bf_raid			= 10;//远古扫荡
+	
+	LI_god_war					= 11;//诸神争霸
+	LI_god_war_raid				= 12;//诸神扫荡
+	
+	LI_pvp						= 13;//pvp
+	LI_task_day_active_score	= 14;//日常任务活跃点
+}
+

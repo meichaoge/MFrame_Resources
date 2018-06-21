@@ -1,0 +1,82 @@
+package protocol;
+
+/**
+  * 结果码的最高4位表示结果码的类型， 以便后续使用，
+  * 有些结果码可能是调试或者只是一个信息提示， 并不是致命的错误， 所以并不是所有的结果码都是错误类型.
+  */
+enum ResultCodeType
+{
+    RET_VERBOSE     = 1;
+    RET_WARNNING    = 2;
+    RET_DEBUG       = 3;
+    RET_INFO        = 4;
+    RET_ERROR       = 5;
+}
+
+// 交易返回码列表
+enum net_rev_status
+{
+    RESULT_OK                                           = 0x00000000;   // 成功
+    ERROR_SYSTEM_MAINTENANCE                            = 0x5f000001;   // 系统维护
+    ERROR_SYSTEM_NOT_SUPPORT                            = 0x5f000002;   // 服务器处理不支持
+
+    // for the old version
+    ERROR_OUT_OF_MEMORY                                 = 0x50000001;   // 内存错误
+
+    // for the main srv
+    ERROR_LOGIN_ACCOUNT_LOCKED                          = 0x50030001;   // 帐号被锁定
+    ERROR_LOGIN_UID_NOT_EXIST                           = 0x50030002;   // UID不存在
+    ERROR_LOGIN_WRONG_TOKEN                             = 0x50030003;   // 错误的Token
+    INVALID_LOGIN_REQ_NAME                              = 0x40030004;   // 错误的LoginReqInfo name
+
+    // for the game srv
+    ERROR_PVP_FRAME                                     = 0x50040001;   // 错误的PVP帧数
+    ERROR_PVP5_PLAY_NEXT_FRAME                          = 0x50040002;   // error when play next frame
+    INVALID_ROLE_STATE_WHEN_FRAME_END                   = 0x40040003;
+    INVALID_ROLE_COMBAT_INFO_WHEN_FRAME_END             = 0x40040004;
+
+    // for the match srv
+    INFO_UNIMPLEMENT                                    = 0x30050001;   // 还没有实现的功能
+    INFO_UNSUPPORT                                      = 0x30050002;   // 不支持的功能
+    ERROR_MATCH_ISEXIST                                 = 0x50050001;   // 已经在匹配中
+    ERROR_MATCH_P_STATE                                 = 0x50050002;   // 玩家状态不对，不允许匹配
+    ERROR_MATCH_INFO                                    = 0x50050003;   // 匹配信息错误
+
+    // for the db
+    ERROR_DB_CONNECT_FAIL                               = 0x50060001;   // 连接数据库失败
+    ERROR_DB_KEY_NOT_EXIST                              = 0x50060002;   // 数据库key不存在
+    ERROR_DB_WRITE_FAIL                                 = 0x50060003;   // 数据库写入失败
+    ERROR_DB_READ_FAIL                                  = 0x50060004;   // 数据库读取失败
+    ERROR_DB_WRONG_UID                                  = 0x50060005;   // UID错误
+    ERROR_DB_WRONG_TYPE                                 = 0x50060006;   // 错误的数据库类型
+
+    // for net packet
+    ERROR_PARSE_PACKET                                  = 0x51000001;   // 解析包错误
+    ERROR_MESSAGE_FORMAT                                = 0x51000002;   // 消息格式错误
+    ERROR_ASK_MESSAGE_NULL                              = 0x51000003;   // 请求消息包为空
+    ERROR_PACKET_INVALID                                = 0x51000004;   // 无效的net packet包
+    ERROR_PACKET_CS_PVP5_FRAME_MISSING                  = 0x51000005;   // 包缺CS_PVP5_FRAME
+    ERROR_PACKET_COMMAND                                = 0x51000006;   // 错误的command请求
+    ERROR_PACKET_PARSE_ROLEINFO_RSP                     = 0x51000007;   // roleinfo回复包错误
+    ERROR_PACKET_WHEN_SERIALIZE_TO_ROLE_INFO            = 0x51000008;
+    ERROR_PACKET_WHEN_SERIALIZE_TO_ROLE_REGISTER_INFO   = 0x51000009;
+
+    // for init
+    ERROR_INIT_NETWORK                                  = 0x52000001;
+    ERROR_INIT_GAME_WORLD                               = 0x52000002;
+    ERROR_INIT_LOGIC_PROCESS                            = 0x52000003;
+    ERROR_INIT_TEAM_INITIALZE                           = 0x52000004;
+    ERROR_WHEN_INIT_ROLE_PROPERY                        = 0x52000005;
+
+    // for config                                       = 0x03000000
+
+    // for the respone, like respone an error code, or package missing.
+    ERROR_RSP_ERROR_RET                                 = 0x54000001;   // 相应回复错误的结果
+
+    // for user
+    ERROR_USER_NOT_EXIST                                = 0x55000001;
+    ERROR_USER_UID_INVALID                              = 0x55000002;
+
+    ERROR_FIND_CONFIG_INFO                              = 0x57000001;  // 寻找配置数据失败
+    ERROR_CONFIG_DATA                                   = 0x57000002;  // 不合理的配置数据
+};

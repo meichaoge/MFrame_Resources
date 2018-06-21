@@ -1,0 +1,4 @@
+1 导入字体资源之后使用 Window/TextMeshPro/Font Asset Creator 打开创建字体资源面板,设置FontSources以及相应的Altas Resolution大小，
+	等设置后创建字体，创建完成后保存到Resources的Fonts & Materials(这个目录是TMP Settings 中已经配置好的)
+
+2 如果需要创建新的字体样式，创建一个材质球并设置Shader为TextMeshPro/Mobie/DistanceFild 然后设置FontAltas以及其他的样式即可

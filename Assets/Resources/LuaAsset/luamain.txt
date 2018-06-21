@@ -1,0 +1,8 @@
+--lua 端的入口 负责加载其他的lua 模块
+main = {}
+
+function main.luaMainEnter()
+        print("lua module main Enter....")
+	end
+	
+return main;

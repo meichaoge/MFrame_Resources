@@ -1,0 +1,3 @@
+﻿{
+"PlayerInfor/PlayerNameTip":"姓名："
+}

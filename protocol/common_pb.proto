@@ -1,0 +1,834 @@
+syntax = "proto2";
+//option optimize_for = LITE_RUNTIME;
+import "pvp_common.proto";
+package protocol;
+
+enum CARD_TYPE
+{
+	cd_common = 1;//普通卡
+	cd_rare = 2;//稀有
+	cd_epic = 3;//史诗
+	cd_legendary = 4;//传说
+}
+
+enum AWARD_TYPE
+{
+	at_gold = 1;//金币
+	at_diamond = 2;//钻石
+	at_stone = 3;//技能石
+	at_godcard = 4;//神明卡
+	at_techpoint = 5;//增加科技点
+	at_task_achive = 6;//加任务成就
+	at_task_active = 7;//加任务活跃
+	at_gift = 8;//礼包
+	at_strength = 9;//添加体力
+	at_team_exp = 10;//增加队伍经验
+	at_exp_water = 11;//增加英雄经验药水
+	at_common_godcard = 12;//增加万能碎片
+    at_god_exp = 13;//增加英雄经验
+    at_daibi = 14; // 代币 //DAIBI_TYPE
+	at_material = 15;//材料
+	at_god_talent = 16;//英雄天赋点
+	at_god_unlock_card = 17;//增加立刻激活英雄卡片
+}
+
+enum DAIBI_TYPE	
+{
+	dab_ancient = 1;//远古代币
+	dab_rank = 2;//天梯
+	dab_god_war = 3;//诸神
+}
+
+enum RANK_TYPE
+{
+	rkt_arena_score_1v1 			= 1;//竞技场1v1分数
+	rkt_arena_score_2v2 			= 2;//竞技场2v2分数
+	rkt_power_score 				= 3;//英雄战力总和
+	rkt_power_score_acient 			= 4;//远古战场的排行榜，排序1v1上阵英雄的战斗力
+	rkt_shop_sell_rank 				= 5;//商城畅销榜
+}
+
+message AwardUnit
+{
+	optional uint32 type = 1; //对应enum AWARD_TYPE
+	optional uint32 gid = 2; //如果是神明卡奖励对应神明id
+	optional uint32 val = 3; //增加的值
+	
+	optional uint32 min_val = 4;// 部分客户界面需要展示最大值最小值
+	optional uint32 max_val = 5;//
+}
+
+// 请求神明信息
+message pb_summoned
+{
+    optional uint32              summoned_id        = 1;   // 召唤物id
+    optional uint32              hp                 = 2;   // 生命值uint32
+    optional float               attack_range       = 3;   // 攻击距离（米）float
+    optional float               attack_speed       = 4;   // 攻击速度float
+    optional uint32              basic_attack_damage = 5;  // 攻击力uint32
+    optional uint32              damage_type        = 6;   // 伤害类型（0物理，1法术）uint32
+    optional float               move_speed         = 7;   // 移动速度float
+    optional uint32              physical_power     = 8;   // 物理强度uint32
+    optional uint32              magical_power      = 9;   // 魔法强度uint32
+    optional uint32              physical_protection = 10; // 物防uint32
+    optional uint32              magical_protection = 11;  // 魔防uint32
+    optional float               heal_per_second    = 12;  // 每秒恢复百分比生命值float
+    optional uint32              physical_pan       = 13;  // 物理穿透uint32
+    optional uint32              magical_pan        = 14;  // 魔法穿透uint32
+    optional uint32              resources_id       = 15;  // 资源ID
+}
+
+message pb_god_skill
+{
+    optional uint32              skill_id           = 1;   // 技能id
+    optional uint32              level              = 2;   // 技能等级
+    optional uint32              type               = 3;   // 类型
+    optional uint32              target             = 4;   // 释放目标
+    optional uint32              cd                 = 5;   // 冷却时间 uint32
+    optional uint32              start_cd_percent   = 6;   // 初始cd百分比 uint32
+    optional float               range_min          = 7;   // 技能判定范围最小值 float
+    optional float               range_max          = 8;   // 技能判定范围最大值 float
+    repeated int32               tag                = 9;   // 技能标签 int32
+    optional uint32              area               = 10;  // 技能伤害类型
+    optional uint32              combine_skill      = 11;  // 组合技能
+    optional string              param              = 12;  // 其它参数 string
+
+    optional uint32              max_level          = 13;  // 最大等级
+    optional uint32              god_level_limit    = 14;  // 英雄等级限制 uint32
+    optional uint32              expend_money       = 15;  // 升级消耗金钱 uint32
+    optional uint32              skill_slot_amount  = 16;  // 升级消耗技能石数量 uint32
+    optional uint32              skill_point        = 17;  // 升级消耗技能点数量 uint32
+    optional pb_summoned         summoned           = 18;  // 召唤物
+}
+
+message pb_god_skill_info
+{
+    repeated pb_god_skill        skill_list         = 1;   // 技能列表
+}
+
+message pb_god_lock_skill
+{
+    optional uint32              skill_id           = 1;   // 技能id
+    optional uint32              max_level          = 2;   // 最大等级
+    optional uint32              unlock_god_level_limit = 3;// 解锁英雄等级限制
+    optional uint32              unlock_skill_slot  = 4;   // 解锁消耗技能石
+    optional uint32              unlock_expend_money= 5;   // 解锁消耗金钱
+    optional uint32              unlock_skill_point = 6;   // 解锁消耗技能点
+    optional uint32              unlock_team_exp    = 7;   // 解锁增加队伍经验
+}
+
+message pb_god_lock_skill_info
+{
+    repeated pb_god_lock_skill   lock_skill_list    = 1;   // 末解锁技能列表
+}
+
+message pb_god_property
+{
+    optional uint32             hp                   =  1; // 生命值
+    optional float              move_speed           =  2; // 移动速度
+    optional float              attack_range         =  3; // 攻击距离（米）
+    optional float              attack_speed         =  4; // 攻击速度
+    optional uint32             basic_attack_damage  =  5; // 攻击力
+    optional uint32             physical_power       =  6; // 物理强度
+    optional uint32             magical_power        =  7; // 魔法强度
+    optional uint32             physical_protection  =  8; // 物防
+    optional uint32             magical_protection   =  9; // 魔防
+    optional float              physical_penetration = 10; // 物理穿透
+    optional float              magical_penetration  = 11; // 法术穿透
+    optional uint32             revive_time_base     = 12;
+    optional uint32             revive_time_factor   = 13;
+    optional uint32             real_god_id          = 14;
+    optional string             params               = 15;
+	optional uint32             quality              = 16;//神明的品质 对应enum CARD_TYPE
+	optional uint32				god_type			 = 17;//英雄类型 对应enum GOD_TYPE
+}
+
+message pb_god
+{
+    optional uint32             		id                  = 1;
+    optional uint32             		level               = 2;//当前等级
+    optional uint32             		node_gold           = 3;//升级星级节点需要的金币
+    optional uint32             		fragment            = 4;//当前拥有的碎片
+    optional uint32             		fragment_upgrade    = 5;//升级星级节点总共需要的碎片
+	optional uint32             		power_score         = 6; //英雄战力值
+    optional uint32             		max_exp_lvl	        = 7; //在英雄天赋的限制下，当前可以升级到的最大等级
+    optional pb_god_property    		property            = 8;
+    optional pb_god_skill_info  		skill_info          = 9;
+    optional pb_god_lock_skill_info 	lock_skill_info 	= 10;
+	optional uint32             		star                = 11;//当前星级
+	optional uint32             		node_num            = 12;//当前星级开启了几个节点
+	optional uint32             		exp_upgrade         = 13;//升级总共需要的经验
+	optional uint32             		exp                 = 14;//当前经验
+	optional uint32                     next_star_fragment  = 15;//升级到下个星级总共需要的碎片
+	optional uint32 					final_skill_angry   = 16;//大招消耗的怒气
+	repeated uint32						talent				= 17;//英雄天赋
+//	optional bool						talent_unlock		= 18;//当前未激活的天赋节点是否已经解锁
+    optional bool                       is_died             = 19;//用于远古战场, 是否已经阵亡
+	optional uint32						pos					= 20;//用作精彩对局中，英雄所在阵型中的位置
+ }
+
+message pb_gods_info
+{
+    repeated pb_god             god_list            = 1;   // 英雄列表
+}
+
+message pb_lock_god
+{
+    optional uint32              god_id             = 1;   // 英雄id
+    optional uint32              max_level          = 2;   // 最大等级
+    optional uint32              fragment           = 3;   // 拥有英雄碎片
+    optional uint32              unlock_fragment    = 4;   // 解锁所需碎片
+    optional uint32              unlock_gold        = 5;   // 解锁所需金币
+	optional uint32              quality            = 6;   // 神明的品质 对应enum CARD_TYPE
+	
+	optional pb_god              god_prop           = 7;   // 英雄解锁后的属性
+	optional uint32 			 final_skill_angry  = 8;	//大招消耗的怒气
+	optional uint32				 god_type			= 9;	//英雄类型
+
+}
+
+message pb_lock_god_info
+{
+    repeated pb_lock_god         lock_god_list      = 1;   // 末解锁英雄列表
+}
+
+enum TASK_UNIT_STATE
+{
+	tus_normal = 1; //就行中
+	tus_complete = 2; //完成
+	tus_get_award = 3; //已领取奖励
+}
+
+message TaskUnit
+{
+	optional uint32 id = 1;
+	//optional uint32 type = 2; //对应TASK_DAY_TYPE
+	repeated uint32 param = 3;
+	optional uint32 state = 4; //任务状态TASK_UNIT_STATE
+}
+
+message TaskInfo
+{
+	repeated TaskUnit task_day_unit = 1;
+	optional uint64 fresh_time = 2;//任务刷新的时间
+	repeated TaskUnit task_main_unit = 7;//主线任务
+//	optional uint32 active_score = 8; //周活跃点数
+	optional uint32 active_day_score = 9; //日活跃点数
+//	optional uint32 achievement_score = 10;//成就点数
+//	optional uint64 active_score_flag = 14;//周活跃领奖标志
+	optional uint64 active_day_score_flag = 15;//日活跃领奖标志
+//	optional uint64 achievement_score_flag = 16;//成就点领奖标志
+}
+
+message pb_activity_info
+{
+	optional uint32 seven_day = 1;//七天登录活动第几天
+	repeated uint32 get_awrad_day = 2;//已经领取了奖励的天数
+	repeated uint32 login_day = 3;//已经等登录的天数
+	optional uint32 seven_award_day = 4;//如果是七天领取奖励的回包，这个字段表示领取的是第几天的奖励
+	repeated uint32 activity_page_id = 5;//已经浏览过的活动页签id
+	repeated uint32 alread_get_level_gift = 6;//已经领取过的等级礼包
+    repeated TaskUnit task_active_unit = 7;//活动任务
+    optional uint64 sevend_start_time = 8; // 7天登录周期的起始时间
+    optional uint64 sevend_end_time = 9; // 7天登录周期的结束时间
+}
+message SessionInfo
+{
+	optional string session = 1;
+}
+
+enum LOGIN_CMD
+{
+	LC_normol = 0;//默认的登录命令
+	LC_bind_account = 1;//绑定账号
+}
+
+enum LOGIN_PLAT
+{
+	LP_normal = 0;//默认的登录
+	LP_deveice_id = 1;//设备id登录
+	LP_google = 2;//google平台登录
+}
+
+//技能石等级
+enum STONE_LVL
+{
+	SL_lvl_1 = 1;
+	SL_lvl_2 = 2;
+	SL_lvl_3 = 3;
+	SL_lvl_4 = 4;
+}
+
+message PbSkillStoneUnit
+{
+	optional uint32 lvl = 1;//技能石的等级
+	optional uint32 num = 2;//技能石的数量
+}
+
+
+//科技树类型
+enum TECH_TREE_TYPE
+{
+	TTT_soldier = 1;//士兵
+	TTT_tower = 2;//塔
+	TTT_tank = 3;//炮车
+}
+
+message PbTechTreeNode
+{
+	optional uint32 id = 1;
+	optional uint32 level = 2;
+	optional uint32 point = 3;//投入的多少点
+}
+
+message pb_rank_combat_info
+{
+	optional uint32 rank_score 						= 1;//竞技场分数
+    optional uint32 total_victory_num				= 2;//一共赢了多少场
+    optional uint32 max_con_victory_num 			= 3;//最多连胜场次
+	optional uint32 highest_rank_score 				= 4;//达到过的最高分数
+	optional uint32 con_three_win_num 				= 5;//三连胜次数
+	optional uint32	con_four_win_num 				= 6;//四连胜次数
+	optional uint32 con_five_win_num 				= 7;//五连胜次数
+	repeated PbRecordNumUnit often_use_god_1v1		= 8;//1v1经常使用的英雄
+	repeated PbRecordNumUnit often_use_god_2v2		= 9;//2v2经常使用的英雄
+	
+	optional uint32 three_kill_num					= 11;//三杀次数
+	optional uint32 four_kill_num					= 12;//四杀次数
+	optional uint32 five_kill_num					= 13;//五杀次数
+	optional uint32 total_kill_num					= 14;//总共杀死次数
+	optional uint32 destroy_tower_num				= 15;//摧毁防御塔的次数
+}
+
+message PbRankCombatInfo
+{
+    optional uint32 rank_score 						= 1;//竞技场分数
+    optional uint32 total_combats_num 				= 2;//一共打了多少场
+    optional uint32 total_victory_num 				= 3;//一共赢了多少场
+    optional uint32 max_con_victory_num 			= 4;//最多连胜场次
+    optional bool last_is_victory  					= 5;//上一场是输还是赢，true为赢
+    optional uint32 cur_con_victory_num 			= 6;//目前的连胜场次
+	optional uint32 highest_rank_score 				= 7;//达到过的最高分数
+	optional uint32 con_three_win_num 				= 8;//三连胜次数
+	optional uint32	con_four_win_num 				= 9;//四连胜次数
+	optional uint32 con_five_win_num 				= 10;//五连胜次数
+	optional uint32 three_kill_num					= 11;//三杀次数
+	optional uint32 four_kill_num					= 12;//四杀次数
+	optional uint32 five_kill_num					= 13;//五杀次数
+	optional uint32 total_kill_num					= 14;//总共杀死次数
+	optional uint32 destroy_tower_num				= 15;//摧毁防御塔的次数
+    repeated uint32 round_record_id					= 16;//战斗记录id
+	optional uint32 total_kill_soldiers_num			= 17;//杀死兵的个数
+	optional uint32 destroy_tank_num				= 18;//摧毁炮车的个数
+}
+
+message PbNiceRoundLikeUnit
+{
+	optional uint32				arena_lvl 			= 1;
+	repeated uint32				like_record_id		= 2;//点赞记录id
+	repeated uint32				view_record_id		= 3;//观看记录的id
+}
+
+message PbCombatInfo
+{
+    optional PbRankCombatInfo 			rank_1v1_info 			= 1;
+    optional PbRankCombatInfo 			rank_2v2_info 			= 2;
+    optional PbRankCombatInfo 			classic_1v1_info 		= 3;
+    optional PbRankCombatInfo 			classic_bot_info 		= 4;
+    optional PbCheckpointAward 			cur_checkpoint_award 	= 5;//当前关卡的奖励信息
+	optional bool 						hide_record 			= 6;//是否隐藏对战记录
+	repeated PbNiceRoundLikeUnit		like_1v1_unit			= 7;//精彩对局点赞信息
+	repeated PbNiceRoundLikeUnit		like_2v2_unit			= 8;//精彩对局点赞信息
+	optional uint64						like_time				= 9;//精彩对局点赞时间
+}
+
+enum season_notify_type
+{
+    SEASON_NOTIFY_TYPE_1V1_REWARD = 0;                  // 赛季1v1获取奖励通知
+    SEASON_NOTIFY_TYPE_2V2_REWARD = 1;                  // 赛季2v2获取奖励通知
+    SEASON_NOTIFY_TYPE_1V1_SCORE_CLEANED = 2;           // 赛季1v1赛季积分被清理
+    SEASON_NOTIFY_TYPE_2V2_SCORE_CLEANED = 4;           // 赛季2v2赛季积分被清理
+}
+
+message PbDbSeasonNotity
+{
+    optional uint32 season_id = 1;                      // 赛季id
+    optional season_notify_type type = 2;               // 赛季通知类型
+    optional uint32 rand_score = 3;                     // 赛季积分
+}
+
+// 这个要时传给client用的, 要比保存db的PbDbSeasonNotity数据要多
+message PbSeasonNotity
+{
+    optional uint32 season_id = 1;                      // 赛季id
+    optional season_notify_type type = 2;               // 赛季通知类型
+    //optional uint32 rand_score = 3;                     // 赛季积分
+    optional uint64 start_time = 4;                     // 赛季通知所对应的赛季开始时间
+    optional uint64 end_time = 5;                       // 赛季通知所对应的赛季结束时间
+    optional uint32 last_season_arena_level = 6;        // 赛季结束时对应的竞技场等级
+    optional uint32 reserve_arena_level = 7;            // 赛季结束后保留的竞技场等级
+}
+
+message PbDbSeasonNotityInfo
+{
+    repeated PbDbSeasonNotity notifies = 1;
+}
+
+
+//任务信息开始，包括新手引导等等
+message PbTaskInfo
+{
+	//optional uint32 new_guide = 1;//新手引导的完成步数，每一位表示一步
+	optional TaskInfo task_info = 3;//任务
+	//optional uint32 new_guide_client = 4;//给客户端设置新手引导计数
+	optional uint64 new_guide_award_flag = 5;//新手引导领取奖励的flag，每一位表示一步的奖励
+	repeated uint32 show_task_unit_type = 6;//好友资料里展示给别人的已完成的成就项
+	repeated PbRecordNumUnit new_guide_unit = 7;//新手引导完成情况
+}
+
+message TaskStepScoreUnit
+{
+	optional uint32 score = 1; //分数
+	optional uint32 award_step = 2;//步数
+	optional bool award = 3;//是否已经领奖，true为已经领了
+}
+
+message pb_task_info
+{
+	repeated TaskStepScoreUnit day_score_step = 1;//日活跃分数
+	repeated TaskStepScoreUnit week_score_step = 2;//周活跃分数
+	optional TaskInfo task_info = 3;//任务
+//	optional uint32 achievement_max_score = 4;//成就最大分
+
+	repeated TaskUnit task_active_unit = 5;//活动任务
+
+	repeated pb_new_guide_unit guide = 6;//新手引导的完成情况
+}
+//任务信息结束
+
+message god_card_unit
+{
+	optional uint32 godid = 1;//卡的id
+	optional uint32 type = 2;//卡的类型 enum CARD_TYPE
+	optional uint32 num = 3;//神明卡数量
+}
+
+message slot_chest_info
+{
+	optional uint32 					slot_id 		= 1;
+	optional uint32 					chest_type 		= 2;//商城宝箱的类型
+	repeated god_card_unit 				card_unit 		= 4;//每一类卡至少掉落的数
+	repeated uint32						chest_tag		= 5;//商城宝箱标签
+	
+    optional uint32 					total_num 		= 9;//卡牌的总数
+    optional uint32 					arena_level 	= 10;
+		
+	repeated AwardUnit 					show_unit 		= 11;//用来展示非英雄卡类物品的掉落情况
+		
+	optional AwardUnit 					cost 			= 12;//购买的消耗或者其他定义
+}
+
+message PbPassCopiesUnit
+{
+	optional uint32 check_point_id = 1;                 // 关卡id
+	optional uint32 pass_stars = 2;                     // 通过时候是几星
+	repeated uint32 star_cond_id = 3;                   // 通过的时候完成了那些条件
+}
+
+message PbCheckpointAward
+{
+	optional uint32 check_point_id = 1;                 // 关卡id
+	repeated AwardUnit award = 2;                       // 怪物掉落的奖励
+	//repeated AwardUnit first_award = 3;    // 首次通关怪物额外掉落奖励
+}
+
+message PbChapterStarAwardUnit
+{
+    optional uint32 star_level = 1;                     // 评星数量等级
+    repeated AwardUnit award = 2;                       // 评星等级奖励, 不保存在db里面, 需要的时候再加载配置表
+    optional bool is_obtain = 3;                        // 是否领取评星等级奖励
+}
+
+message PbChapterUnit
+{
+    optional uint32 chapter_id = 1;                     // 章节id
+    //optional uint32 stars = 2;                          // 章节累计关卡星数
+    repeated PbPassCopiesUnit pass_copy_unit = 3;       // 已通过的关卡
+    //repeated PbChapterStarAwardUnit chapter_star_awards = 4; // 章节评星奖励
+	optional uint32 star_award_flag  = 5;//星级奖励的领取标志
+}
+
+// 神殿信息
+enum CheckpointState
+{
+    CS_PASSED = 1;                                          // 已经通过
+    CS_OPEN = 2;                                            // 开放, 但是没有通过
+    CS_LOCK = 3;                                            // 未解锁
+}
+
+message PbPantheonDiffcultyUint
+{
+    optional uint32 difficulty_level = 1;                   // 难易级别
+    optional CheckpointState state = 2;                     // 解锁状态
+    repeated AwardUnit preview_awards = 3;                  // 可能获得的奖励
+    optional uint32 checkpoint_id = 4;                      // 关卡id
+    optional uint32 scene_id  = 5;                          // 场景id
+    repeated AwardUnit preview_first_awards = 6;            // 首通奖励阅览
+}
+
+message PbPantheonUint
+{
+    optional uint32 id = 1;                                 // 神殿id
+    //optional uint32 challenge_num = 2;                      // 一天中挑战的次数
+    optional uint32 max_challenge_num = 3;                  // 一天中最大挑战次数
+    optional uint32 remain_challenge_num = 4;               // 一天中剩余挑战次数
+    optional uint32 open_hour = 5;                          // 开放时间，小时数
+    optional uint32 open_minute = 6;                        // 开放时间，分钟数
+    optional bool is_open = 7;                              // 是否开放
+    repeated PbPantheonDiffcultyUint difficulty_units = 8;  // 神殿难度关卡记录信息
+    repeated uint32 open_days = 9;                          // 一周中开放的天
+    optional string boss_id  = 10;                          // boss_id, 对应monster里面的unit_id id
+    optional uint32 recommand_teamlv = 11;                  // 推荐玩家的队伍等级
+    optional uint32 fightnum_price = 12;                     // 挑战次数购买的价格
+}
+
+message PbPantheonInfo
+{
+    repeated PbPantheonUint pantheon_units = 1;             // 神殿信息
+}
+
+message PbCopiesInfo
+{
+    optional uint32 last_pass_copy = 1;                 // 最后一次通关的关卡id
+    optional uint32 last_active_chapter_id = 2;         // 最近一次打过的章节id
+    optional uint32 last_active_checkpoint_id= 3;       // 最近一次打过的关卡id
+    optional uint32 flag_checkpoint_id = 4;             // 最近通过的，需要展示插旗动画的id
+    repeated PbChapterUnit chapter_info = 5;            // 章节信息
+}
+
+message PbRecordNumUnit
+{
+	optional uint32 id = 1;
+	optional uint32 num = 2;
+	optional uint32 reset_num = 3;
+}
+
+// 神殿, 光影池每日挑战次数
+message PbCheckpointDailyUnit
+{
+    optional uint64 id = 1;
+    optional uint32 challenged_num = 2;
+    optional uint32 fightnum_buy_num = 3; // 战斗次数购买次数
+}
+
+message PbCheckpointDailyInfo
+{
+    repeated PbCheckpointDailyUnit checkpoint_daily_units = 1;
+}
+
+//匹配结束的原因
+enum MATCH_END_REASON
+{
+	mer_timeount = 1;//有人超时
+	mer_refuse = 2;//有人拒绝
+	mer_logout = 3;//有人主动退出了游戏
+}
+// 神明站位
+message PbStance
+{
+    optional uint32 pos = 1;
+    optional uint32 god_id = 2;
+}
+
+message PbLineup
+{
+    repeated PbStance stance_list = 1;
+    optional uint64 key = 2;                            // 最高32位是pb_lineup_type, 低32为是id
+}
+
+message PbPantheonLineup
+{
+    optional uint32 id = 1;                             // 神殿的id
+    optional PbLineup lineup = 2;                       // 神殿id对应的阵型信息
+}
+message pb_new_guide_unit
+{
+	optional uint32 type = 1;  //提供给客户端用来设置完成哪些新手引导，type的枚举客户端自己定义
+	repeated uint32 val = 2;  //数组每个元素的值区间为0到31，在完成一步新手任务，只需要传递一个元素过来
+}
+
+// 远古战场信息开始
+message pb_ancient_battlefield_info
+{
+    optional uint32 							curr_to_pass_id 			= 1[default = 1];	// 当前需要通关的关卡id
+    repeated pb_ancient_battlefield_unit 		icon_id_lst					= 2;				// 所有的关卡头像
+    repeated uint32 							self_died_god_id_list		= 3;				// 自身阵亡的英雄id
+    optional uint32 							fighting_power				= 4;				// 玩家自身的战力
+    optional uint32 							reset_num_limit				= 5;				// 一天最大重置次数
+    optional uint32 							curr_reset_num				= 6;				// 当前重置次数
+    optional bool 								is_opened_chest				= 7;				// 是否获取过关的宝箱
+    optional uint32 							last_passed_num				= 8;				// 上次通过的关卡数
+    repeated AwardUnit 							pre_reward_list				= 9;				// 远古战场所掉了的所有的奖励的奖励类型
+    repeated pb_ancient_bf_chest_unit 			bf_chest_unit_list			= 10;				// 关卡的宝箱
+}
+
+message pb_ancient_battlefield_unit
+{
+    optional uint32 id = 1;                                         // 关卡的id
+    optional string opp_name = 2;                                   // 对手的名字
+    optional uint32 opp_fighting_power = 3;                         // 对手的战斗力
+    repeated pb_god opp_god_list = 4;                               // 关卡对手的英雄信息
+    repeated AwardUnit rewards = 5;                                 // 奖励, unit请求的时候有值
+	optional uint32 icon_id = 6;									// 对手头像
+}
+
+message pb_ancient_bf_chest_unit
+{
+    optional uint32 id = 1;                                         // 关卡的id
+    repeated AwardUnit chest_rewards = 7;                           // 宝箱奖励, 请求的时候有值
+    optional uint32 revive_card_id = 8;                             // 复活道具id, 有这个值时表示有复活卡
+}
+
+message pb_died_god
+{
+    optional uint32 id = 1;                                         // 死亡的英雄的id
+    optional bool is_self = 2;                                      // 死亡的英雄是自己的还是敌方英雄的
+}
+// 远古战场信息结束
+
+// 光影战场信息开始
+message pb_lightombtf_info
+{
+    repeated pb_lightombtf_unit lightombtf_unit_list = 1;
+    repeated AwardUnit pre_reward_list = 2;                         // 光影战场所掉了的所有的奖励的奖励类型
+}
+
+message pb_lightombtf_unit
+{
+    optional uint32 id = 1;                                         // 光影池id
+    optional uint32 remain_fighting_num = 2;                        // 剩余战斗次数
+    optional uint32 fighting_limit = 3;                             // 战斗次数限制
+    optional string enemy_attr_hint = 4;                            // 敌方属性提示
+    optional uint32 open_hour = 5;                                  // 开放时间，小时数
+    optional uint32 open_minute = 6;                                // 开放时间，分钟数
+    optional bool is_open = 7;                                      // 是否开放
+    repeated uint32 open_days = 8;                                  // 一周中开放的天
+    repeated pb_lightombtf_hardlv_unit hardlv_units_list = 9;       // 光影难度关卡记录信息
+    optional uint32 recommand_teamlv = 10;                          // 推荐玩家的队伍等级
+    optional uint32 fightnum_price = 11;                            // 挑战次数购买的价格
+}
+
+message pb_lightombtf_hardlv_unit
+{
+    optional uint32 hard_lv = 1;                                    // 光影难度level id
+    //repeated pb_lightombtf_round_unit round_unit_list = 2;          // round 奖励
+    optional CheckpointState state = 3;                             // 解锁状态
+    repeated AwardUnit preview_list = 4;                            // 难度阅览奖励
+}
+
+message pb_lightombtf_round_unit
+{
+    optional uint32 rid = 1;                                        // 光影round id
+    //repeated AwardUnit rewards = 2;                                 // round 奖励
+    repeated RoundAwardUnit reward_list = 3;                        // ex round 奖励
+}
+
+message RoundAwardUnit
+{
+    optional AwardUnit reward = 1;                                  // round 奖励
+    optional bool is_god_drop = 2;                                  // 是否在英雄身掉落
+    optional uint32 split_pkg_num = 3;                              // 将奖励划分成
+}
+
+// 光影战场信息结束
+
+//pvp战斗记录
+message record_god_unit
+{
+	optional uint32 id 			= 1;//英雄id
+	optional uint32 kill_num 	= 2;//击杀英雄数
+	optional uint32 damage		= 3;//造成伤害
+	optional uint32 bedamage	= 4;//承受伤害
+	optional uint32 restore		= 5;//治疗
+	optional uint32 level		= 6;//英雄等级
+	optional uint32 grade		= 7;//英雄表现评级mvp s a b
+}
+
+message record_player_unit
+{
+	optional uint64 			uid 			= 1;
+	repeated record_god_unit 	god 			= 2;//上阵英雄
+	optional uint32				three_kill		= 3;//三杀次数
+	optional uint32				four_kill		= 4;//四杀次数
+	optional uint32				five_kill		= 5;//五杀次数
+	optional uint32				tower_hp_per	= 6;//塔剩余血量，百分比的分子
+	optional uint32				team_lvl		= 7;//队伍等级
+	optional uint32				team_type		= 8;//TEAM_ONE或者TEAM_TWO
+	optional uint32				before_score	= 9;//比赛开始前的竞技场分数，服务器写入
+    optional int32				change_score	= 10;//结束后分数的变化，服务器写入，正数得分，负数扣分
+	optional uint32             kill_soldiers   = 11;//杀死兵的个数
+	optional uint32				destroy_tank	= 12;//摧毁炮车的个数
+}
+
+message record_round_info
+{
+	repeated record_player_unit 			player 				= 1;
+	optional uint64 						record_time 		= 2;//服务器自动写入
+	optional uint32 						round_time			= 3;//本局比赛的时长（秒）
+	optional uint32 						win_team_type		= 4;//本局获胜的一方的队伍，TEAM_ONE或者TEAM_TWO
+	optional uint32 						round_score			= 5;//对局的精彩程度，评分
+	optional uint32 						record_id			= 6;//服务器写入
+	optional uint32 						like_num			= 7;//被点赞数
+	//optional PbPvpBattleRecordInfo 		battle_record_info 	= 8;// 战斗帧同步数据
+	repeated PbFrameRecordUnit 				frame_record_list 	= 10;// 战斗的帧数据
+	optional pb_combat_info 				combat_info 		= 11;// 战斗关卡信息
+	optional uint32							view_num			= 12;//观看次数
+}
+//pvp战斗记录结束
+
+message FriendInfo
+{
+	optional bytes nick_name 				= 1;//昵称
+	optional uint32 level 					= 2;//等级
+	optional int32 online_state 			= 3;//在游戏中状态，在线离线等等
+	optional uint64 freshtime 				= 4;//FriendInfo刷新的时间，可作为上次登录时间
+	optional uint32 icon_id 				= 5;//英雄id，使用英雄头像作为id
+	optional uint32 total_power_score 		= 6;//英雄总战力
+	optional uint32 rank_score_2v2 			= 7;//竞技场2v2的分数
+}
+
+message FriendListUnit
+{
+	optional uint64 uid = 1;///好友的id
+	optional uint64 opt_time = 2;//添加好友的时间
+	optional int32 state = 3;//好友的状态enum FRIEND_STATE
+	optional bool offline_be_add = 4;//为true表示是在下线的时候被添加了
+	optional bool presented = 5;//为true表示已经向该好友赠送了礼物，该值其实存在dayinfo中
+	optional int32 gift_flag = 6;//表示好友向自己赠送礼物，以及领取的标志FRIEND_GIFT_FLAG，该值其实存在dayinfo中
+}
+
+message FriendInfoTotal
+{
+	optional FriendListUnit lstunit = 1;
+	optional FriendInfo     infounit = 2;
+}
+
+enum team_type
+{
+    TEAM_ONE = 1;
+    TEAM_TWO = 2;
+}
+
+message pb_formation
+{
+    optional uint32              pos                = 1;   // 布阵位置
+    optional uint32              god_id             = 2;   // 英雄id
+}
+
+// 坐标
+message pb_vector3
+{
+    optional float x = 1;
+    optional float y = 2;
+    optional float z = 3;
+}
+
+message pb_tower
+{
+    optional uint32              tower_level        = 1;   // ID （Role leve or Pveconfig_t level）
+    optional uint32              hp                 = 2;   // 生命值
+    optional float               attack_range       = 3;   // 攻击距离（米）
+    optional float               attack_speed       = 4;   // 攻击速度
+    optional uint32              basic_attack_damage = 5;  // 攻击力
+    optional uint32              damage_type        = 6;   // 伤害类型（0物理，1法术）
+    optional float               move_speed         = 7;   // 移动速度
+    optional uint32              physical_power     = 8;   // 物理强度
+    optional uint32              magical_power      = 9;   // 魔法强度
+    optional uint32              physical_protection = 10; // 物防
+    optional uint32              magical_protection = 11;  // 魔防
+    optional float               heal_per_second    = 12;  // 每秒恢复百分比生命值
+    optional uint32              physical_pan       = 13;  // 物理穿透
+    optional uint32              magical_pan        = 14;  // 魔法穿透
+    optional uint32              resources_id       = 15;  // 防御塔资源（1蓝色防御塔，2红色防御塔）
+	
+
+	optional uint32 t_god_phy = 16;//神明在塔区域时候的物防增加
+	optional uint32 t_god_magic = 17;//神明在塔区域时候的魔防增加
+	optional uint32 t_c_attack_overlap = 18;//塔连续攻击近战兵的叠加
+	optional uint32 t_f_attack_overlap = 19;//塔连续攻击远程兵的叠加
+}
+
+message pb_combat_lineup
+{
+    optional uint32              player_id          = 1;
+    optional team_type           team               = 2;
+    repeated pb_formation        formation          = 3;
+}
+
+message pb_combat_player
+{
+    optional uint32              player_id          = 1;
+    optional uint32              team               = 2;   // 队伍
+    optional pb_gods_info        gods               = 3;   // 英雄
+	optional uint64				 uid				= 4;
+}
+
+message pb_combat_team
+{
+    optional uint32              team               = 1;   // 队伍
+    optional pb_vector3          god_forward        = 2;   // 英雄朝向
+    optional pb_vector3          god_start_point    = 3;   // 出身点坐标
+    optional pb_vector3          god_retreat_point  = 4;   // 撤退点坐标
+    optional pb_tower            tower              = 5;   // 防御塔
+    repeated pb_spawners         spawners           = 6;   // 刷兵
+}
+
+message pb_spawners
+{
+    optional pb_vector3          pos                = 1;   // 出生坐标
+    optional uint32              type               = 2;   // 士兵类型
+    optional uint32              level              = 3;   // 等级(role或者Pveconfig_t 等级)
+    repeated pb_soldier          soldier            = 4;   // 士兵(根据role level 或者Pveconfig_t level读表)
+    optional uint32              soldier_id         = 5;   // 士兵id
+    optional uint32              resources_id       = 6;   // 资源id（1蓝色近战，2红色近战，3蓝色远程，4红色远程）
+    optional uint32              count              = 7;   // 每波数量
+    optional float               start_time         = 8;   // 第一波时间
+    optional float               spawn_interval     = 9;   // 单个士兵间隔
+    optional float               wave_interval      = 10;  // 每一波间隔
+    optional pb_vector3          forward            = 11;  // 朝向
+}
+
+message pb_soldier
+{
+    optional uint32              soldier_id         = 1;   // 士兵id（1近战，2远程）
+    optional uint32              hp                 = 2;   // 生命值uint32
+    optional float               attack_range       = 3;   // 攻击距离（米）float
+    optional float               attack_speed       = 4;   // 攻击速度float
+    optional uint32              basic_attack_damage = 5;  // 攻击力uint32
+    optional uint32              damage_type        = 6;   // 伤害类型（0物理，1法术）uint32
+    optional float               move_speed         = 7;   // 移动速度float
+    optional uint32              physical_power     = 8;   // 物理强度uint32
+    optional uint32              magical_power      = 9;   // 魔法强度uint32
+    optional uint32              physical_protection = 10; // 物防uint32
+    optional uint32              magical_protection = 11;  // 魔防uint32
+    optional float               heal_per_second    = 12;  // 每秒恢复百分比生命值float
+    optional uint32              physical_pan       = 13;  // 物理穿透uint32
+    optional uint32              magical_pan        = 14;  // 魔法穿透uint32
+    optional uint32              resources_id       = 15;  // 资源ID,炮车用等级相关
+    optional uint32              level              = 16;  // 炮车显示等级
+	
+	optional uint32 			 p_hold_phy 		= 17;   //炮车架起的物防增加     
+	optional uint32 			 p_hold_magic 		= 18;   //炮车架起的魔防增加
+	optional uint32 			 p_hold_hp 			= 19;	//炮车架起的血量增加
+	optional uint32 			 p_hold_attack 		= 20;	//炮车架起的攻击增加
+}
+
+message pb_combat_info
+{
+    optional uint32              checkpoint_id      = 1;   // 关卡id or mapid (pvp)
+    optional uint32              scene_id           = 2;   // 场景id
+    optional uint32              seed               = 3;   // 战斗中的随机种子
+    repeated pb_combat_player    player_info        = 4;   // 玩家信息
+    repeated pb_combat_team      team_info          = 5;   // 队伍信息
+}
+

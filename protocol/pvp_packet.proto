@@ -1,0 +1,120 @@
+syntax = "proto2";
+//option optimize_for = LITE_RUNTIME;
+import "common_pb.proto";
+import "pvp_common.proto";
+package protocol;
+
+enum combat_command_id
+{
+	PVP_COMMAND_START = 10001;
+	
+    CS_PVP_CLIENT_READY                 = 10004;         // PVP客户准备完成确认
+    SC_PVP_CLIENT_READY                 = 10005;         // PVP客户准备完成确认
+
+    CS_PVP_FRAME                        = 10006;         // PVP运行帧准备完成后为第1帧，服务先下发
+    SC_PVP_FRAME                        = 10007;
+
+    CS_PVP_FRAME_END                    = 10008;         // PVP5结束帧
+    SC_PVP_FRAME_END                    = 10009;
+
+    CS_PVP_OPERATION                    = 10010;         // PVP运行帧operation
+
+    CS_PLAYER_STATE_CHANGED_NOTIFY      = 10013;
+    SC_PLAYER_STATE_CHANGED_NOTIFY      = 10014;
+
+    CS_PVP_RESTORE_COMBAT               = 10015;
+    SC_PVP_RESTORE_COMBAT               = 10016;
+
+    CS_PVP_RESTORE_COMBAT_READY         = 10017;
+    SC_PVP_RESTORE_COMBAT_READY         = 10018;
+    // Todo more
+
+    //
+    CS_PVP_HEARTBEAT                    = 10019;
+    SC_PVP_SESSION_EXPIRED              = 10020;
+	CS_TEST_1							= 10021;
+	SC_TEST_1							= 10022;
+
+    PVP_COMMAND_END = 10500;
+}
+
+message cs_pvp_heartbeat
+{
+    // empty
+}
+
+// PVP客户准备完成确认
+message cs_pvp_client_ready
+{
+    // 空包
+}
+
+//
+message sc_pvp_client_ready
+{
+    // 空包
+	optional bool warm_round = 1;//true表示是温暖局
+}
+
+// PVP帧
+message cs_pvp_frame
+{
+    optional int32               frame              = 1;   // 帧
+    optional int32               crc                = 2;   // crc同步校验
+}
+
+message cs_pvp_operation
+{
+    optional pb_operation        operation          = 1;   // 操作
+}
+
+message sc_pvp_frame
+{
+    optional int32               frame              = 1;   // 当前服务器帧
+    optional bool                is_sync            = 2;   // 客户端是否要给服务器发同步数据:当前服务器会先卡到这一帧
+    repeated pb_pvp_frame_info   frame_info         = 3;   // 帧信息, 只有有操作的帧才会添加到这个字段里面
+}
+
+/*
+ * for command: SC_PVP_SESSION_EXPIRED
+ */
+ message sc_pvp_session_expired
+ {
+ }
+
+// 结束帧
+message cs_pvp_frame_end
+{
+    optional int32              frame               = 1;   // 帧
+    optional bool               is_victory          = 2;   // 是否胜利 ture为胜利, false为失败
+	optional record_round_info	round_details		= 3;   // 战斗详情
+}
+
+message sc_pvp_frame_end
+{
+    // 空
+}
+
+message pvp_restore_combat_info
+{
+    optional int32 restore_frame = 1;
+}
+
+message cs_pvp_restore_combat
+{
+}
+
+message sc_pvp_restore_combat
+{
+    optional uint32 result = 1;
+    optional pvp_restore_combat_info restore_combat_info = 2;
+}
+
+message cs_pvp_restore_combat_ready
+{
+}
+
+message sc_pvp_restore_combat_ready
+{
+    optional uint32 result = 1;
+}
