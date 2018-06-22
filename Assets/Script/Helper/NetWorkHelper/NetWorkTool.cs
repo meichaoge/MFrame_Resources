@@ -13,10 +13,10 @@ namespace MFramework.NetWork
     {
         B,
         KB,
-        M,
-        G,
-        T,
-        P
+        MB,
+        GB,
+        TB,
+        PB
     }
 
 
