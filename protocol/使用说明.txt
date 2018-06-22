@@ -1,0 +1,7 @@
+当前 protobuf-net.zip 包导入Unity 时候会报一个不安全代码的4个错误，在Asset目录下建立一个smcs.rsp 文件，配置为 -unsafe 即可
+其他版本的protobuf-net 导入会出错
+
+
+
+1 首次生成.cs 代码需要按照“ 编译proto文件.PNG”来编译一份.cs 文件，然后放置在 “proto_gen.bat”中对应的位置
+2 以后修改文件可以直接使用批处理替换文件(批处理的路径可以自己配置，也可以配置多个)
